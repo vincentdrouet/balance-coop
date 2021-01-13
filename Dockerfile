@@ -1,4 +1,4 @@
-FROM node:12 AS frontend
+FROM node:14 AS frontend
 COPY ./client /app/client
 RUN cd /app/client; \
     npm install; \
