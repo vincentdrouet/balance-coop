@@ -1,0 +1,13 @@
+version: '2.1'
+
+services:
+  web:
+    image: balance-coop
+    build:
+      context: .
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - web.env
+    ports:
+      - 8000:5000/tcp

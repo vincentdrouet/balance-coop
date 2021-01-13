@@ -1,0 +1,29 @@
+version: '2.1'
+services:
+  web:
+    image: balance-coop
+    restart: unless-stopped
+    build:
+      context: .
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - web.env
+    networks:
+      default:
+      inverseproxy_shared:
+    labels:
+      traefik.docker.network: "inverseproxy_shared"
+      traefik.enable: "true"
+      traefik.frontend.passHostHeader: "true"
+      traefik.port: "80"
+      traefik.frontend.rule: "Host:balance.lachouettecoop.fr"
+      traefik.frontend.auth.basic.users: "USER:PASS_ENC"
+
+networks:
+  default:
+    internal: true
+    driver_opts:
+      encrypted: 1
+  inverseproxy_shared:
+    external: true

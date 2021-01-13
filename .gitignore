@@ -1,0 +1,14 @@
+
+# Persistency
+data/
+# Python
+__pycache__/
+.venv/
+*.pyc
+# Pycharm project file
+.idea/
+# Docker environment files
+web.env
+# NPM
+node_modules/
+dist/
