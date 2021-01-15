@@ -5,17 +5,19 @@ import os
 from threading import Thread
 from time import sleep
 
-from api.bizerba.message import Message
-from api.bizerba.screen import Screen
+from api.scale.message import Message
+from api.scale.screen import Screen
 
-MOCK_BIZEBA = os.environ.get("MOCK_BIZEBA", "False").lower() in ["true", "1"]
+MOCK_SCALE = os.environ.get("MOCK_SCALE", "False").lower() in ["true", "1"]
+SCALE_ADDR = os.getenv("SCALE_ADDR")
+SCALE_PORT = int(os.getenv("SCALE_PORT", 65432))
 
 
-class Bizerba(Thread):
+class Scale(Thread):
     def __init__(self, socket_io):
-        super(Bizerba, self).__init__()
-        self.addr = os.getenv("BIZERBA_ADDR")
-        self.port = int(os.getenv("BIZERBA_PORT", 65432))
+        super(Scale, self).__init__()
+        self.addr = SCALE_ADDR
+        self.port = SCALE_PORT
         self._socket_io = socket_io
         self._keep_running = True
         self._sock = None
@@ -30,7 +32,7 @@ class Bizerba(Thread):
     def run(self):
         s = Screen()
         while self._keep_running:
-            if MOCK_BIZEBA:
+            if MOCK_SCALE:
                 import random
 
                 self._healthy = True

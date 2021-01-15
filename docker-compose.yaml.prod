@@ -16,8 +16,8 @@ services:
       traefik.docker.network: "inverseproxy_shared"
       traefik.enable: "true"
       traefik.frontend.passHostHeader: "true"
-      traefik.port: "80"
-      traefik.frontend.rule: "Host:balance.lachouettecoop.fr"
+      traefik.port: "5000"
+      traefik.frontend.rule: "Host:scale.lachouettecoop.fr"
       traefik.frontend.auth.basic.users: "USER:PASS_ENC"
 
 networks:

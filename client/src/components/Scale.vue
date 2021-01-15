@@ -6,7 +6,7 @@
     <v-spacer></v-spacer>
     <v-row>
       <v-col>
-        <h1 :class="weight>0?'white--text text-right':'orange--text text-right'">Poid :</h1>
+        <h1 :class="weight>0?'white--text text-right':'orange--text text-right'">Poids :</h1>
       </v-col>
       <v-col>
         <h1 :class="weight>0?'white--text':'orange--text'">{{ Number((weight).toFixed(3)) }}</h1>

@@ -5,7 +5,7 @@ from flask import Flask, jsonify, send_file, session
 from flask_socketio import SocketIO, emit
 
 from api.odoo import variable_weight_products
-from api.bizerba import Bizerba
+from api.scale import Scale
 
 ALLOW_ALL_ORIGINS = os.environ.get("ALLOW_ALL_ORIGINS", "False").lower() in [
     "true",
@@ -42,24 +42,24 @@ def allow_all_origins(response):
 def on_connect():
     logging.info("Connected ...")
     if session.get("clients_nb", 0) == 0:
-        bizerba = Bizerba(socket_io)
-        bizerba.start()
-        session["bizerba"] = bizerba
+        scale = Scale(socket_io)
+        scale.start()
+        session["scale"] = scale
         session["clients_nb"] = 0
     session["clients_nb"] += 1
-    bizerba = session["bizerba"]
+    scale = session["scale"]
     emit(
         "scale_status",
-        bizerba.status,
+        scale.status,
     )
 
 
 @socket_io.on("disconnect")
 def on_disconnect():
     logging.info("Disconnected ...")
-    if session.get("clients_nb", 0) == 1 and session.get("bizerba", None):
-        session["bizerba"].stop()
-        session["bizerba"] = None
+    if session.get("clients_nb", 0) == 1 and session.get("scale", None):
+        session["scale"].stop()
+        session["scale"] = None
     session["clients_nb"] -= 1
 
 

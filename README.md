@@ -23,11 +23,11 @@ ODOO_URL=https://odoo.fr/jsonrpc  # Odoo jsonrc URL
 ODOO_LOGIN=...                    # Odoo user login
 ODOO_PASSWORD=...                 # Odoo user password
 
-BIZERBA_ADDR=127.0.0.1            # Bizerba scale ip
-BIZERBA_PORT=65432                # Bizerba scale port
+SCALE_ADDR=127.0.0.1              # Scale ip
+SCALE_PORT=65432                  # Scale port
 
 ALLOW_ALL_ORIGINS=True            # For development only, CORS management
-MOCK_BIZEBA=True                  # For development only, mock scale
+MOCK_SCALE=True                   # For development only, mock scale
 
 STATIC_PATH=/app/client/dist/static
 ```

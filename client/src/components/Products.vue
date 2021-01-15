@@ -106,6 +106,11 @@ export default {
     rowsNb: 4,
     columnsNb: 3,
   }),
+  watch: {
+    productsCategory() {
+      this.onBoarding = 0;
+    },
+  },
   methods: {
     next() {
       if (this.onBoarding + 1 === this.bagsOfProducts.length) {

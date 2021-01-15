@@ -17,15 +17,15 @@
             >
               <v-spacer></v-spacer>
               <v-row>
-                <v-btn value="fruit" width="150px" height="80px">Fruits</v-btn>
-                <v-btn value="legume" width="150px" height="80px">Légumes</v-btn>
+                <v-btn value="fruit" width="120px" height="80px">Fruits</v-btn>
+                <v-btn value="legume" width="120px" height="80px">Légumes</v-btn>
               </v-row>
               <v-row>
                 <v-btn value="vrac" width="150px" height="80px">Vrac</v-btn>
               </v-row>
               <v-row>
-                <v-btn value="viande" width="150px" height="80px">Viande</v-btn>
-                <v-btn value="poisson" width="150px" height="80px">Poisson</v-btn>
+                <v-btn value="viande" width="120px" height="80px">Viande</v-btn>
+                <v-btn value="poisson" width="120px" height="80px">Poisson</v-btn>
               </v-row>
               <v-row>
                 <v-btn value="fruit_sec" width="150px" height="80px">Fruits secs</v-btn>

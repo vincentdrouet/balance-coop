@@ -6,9 +6,17 @@
           <v-row>
             <v-col>
               <v-img
+                v-if="product.image_medium"
                 :src="'data:image/jpeg;base64,'+product.image_medium"
                 max-height="140"
                 max-width="250"
+              />
+              <v-img
+                v-else
+                src="@/assets/logo.png"
+                max-height="140"
+                max-width="140"
+                class="mx-auto"
               />
             </v-col>
             <v-col class="pa-0 ma-0 align-self-center" align="center">
@@ -25,7 +33,7 @@
               <v-row>
                 <v-col>
                   <h2 :class="weight>0?'text-right':'orange--text text-right'">
-                    Poid :
+                    Poids :
                   </h2>
                 </v-col>
                 <v-col>
@@ -57,7 +65,7 @@
           <v-btn width="200px" height="80px"
                  @click="weightChange=!weightChange"
                  :input-value="weightChange">
-            Modifier le poid
+            Modifier le poids
           </v-btn>
           <v-btn width="200px" height="80px"
                  @click="$emit('cancel')"

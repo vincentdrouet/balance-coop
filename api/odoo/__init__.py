@@ -9,7 +9,7 @@ from aio_odoorpc_base.helpers import execute_kwargs
 from tinydb import TinyDB
 from typing import List, Dict
 
-ODOO_URL = os.getenv("ODOO_URL", "https://test.sas.lachouettecoop.fr/jsonrpc")
+ODOO_URL = os.getenv("ODOO_URL", "https://test.sas.lachouettecoop.fri/jsonrpc")
 ODOO_DB = os.getenv("ODOO_DB", "dbsas")
 ODOO_LOGIN = os.getenv("ODOO_LOGIN")
 ODOO_PASSWORD = os.getenv("ODOO_PASSWORD")
@@ -57,9 +57,9 @@ def _load_from_db():
 
 
 def _save_in_db(products):
+    os.remove(TINYDB_PATH)
     db = TinyDB(TINYDB_PATH)
     products_table = db.table(PRODUCTS_TABLE)
-    products_table.truncate()
     for product in products:
         products_table.insert(product)
 
