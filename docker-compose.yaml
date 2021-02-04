@@ -3,6 +3,7 @@ version: '2.1'
 services:
   web:
     image: balance-coop
+    restart: unless-stopped
     build:
       context: .
     volumes:
@@ -10,4 +11,4 @@ services:
     env_file:
       - web.env
     ports:
-      - 8000:5000/tcp
+      - 5000:5000/tcp

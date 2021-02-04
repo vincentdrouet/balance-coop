@@ -36,9 +36,9 @@ Then run
 docker-compose up -d
 ```
 
-API will be accessible to http://localhost:8000/api
+API will be accessible to http://localhost:8000/
 ```bash
-curl http://localhost:8000/api/ping
+curl http://localhost:8000/ping
 ```
 It shall respond `{"name":"balance-coop","status":"ok"}`
 
@@ -47,3 +47,11 @@ It shall respond `{"name":"balance-coop","status":"ok"}`
 poetry install
 poetry run python main.py
 ```
+
+### Scale
+We use a Bizerba scale. This product can stream its screen on the port 1240.
+We use this stream to get weight and tare.
+This option shall be activated on the device.
+
+### Printer
+We use an Epson TM T88v-i. It's a network printer.

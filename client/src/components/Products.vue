@@ -18,12 +18,13 @@
         color="primary"
       />
     </v-container>
-    <v-card v-else-if="bagsOfProducts.length > 0" flat cols="10">
+    <v-card v-else-if="bagsOfProducts.length > 0" flat cols="10" style="height: 100%">
       <v-list-item-group
         v-model="selectedProduct"
         color="indigo"
+        style="height: 100%"
       >
-        <v-card-actions class="justify-space-between">
+        <v-card-actions class="justify-space-between"  style="height: 10%">
           <v-btn
             depressed
             outlined
@@ -61,21 +62,30 @@
             <v-icon>mdi-chevron-right</v-icon>
           </v-btn>
         </v-card-actions>
-        <v-window v-model="onBoarding">
+        <v-window v-model="onBoarding" style="height: 90%">
           <v-window-item
             v-for="(page, p) in bagsOfProducts"
             :key="`page-${p}`"
+            style="height: 100%"
           >
-            <v-card>
+            <v-card
+              style="height: 100%"
+              class="d-flex flex-column">
               <v-row
                 v-for="(row, r) in page"
                 :key="`row-${r}`"
+                class="pa-0 ma-0"
               >
                 <v-col
                   v-for="(product, c) in row"
                   :key="`col-${c}`"
+                  class="pa-0 ma-0"
                 >
-                  <v-list-item v-if="product" class="pa-0 ma-0" three-line :value="product">
+                  <v-list-item
+                    v-if="product"
+                    class="pa-0 ma-0"
+                    three-line
+                    :value="product">
                     <Product :product="product"/>
                   </v-list-item>
                 </v-col>
@@ -103,8 +113,6 @@ export default {
   data: () => ({
     selectedProduct: null,
     onBoarding: 0,
-    rowsNb: 4,
-    columnsNb: 3,
   }),
   watch: {
     productsCategory() {
@@ -131,6 +139,13 @@ export default {
     },
   },
   computed: {
+    rowsNb() {
+      return Math.floor(this.$vuetify.breakpoint.height / 220);
+    },
+    columnsNb() {
+      const productsWidth = this.$vuetify.breakpoint.width * 0.83;
+      return Math.floor(productsWidth / 410);
+    },
     bagsOfProducts() {
       const nbProductsByPage = this.columnsNb * this.rowsNb;
       const nbPages = Math.ceil(this.products.length / nbProductsByPage);
@@ -164,9 +179,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
   .v-list-item {
     width: 25vw;
     height: 20vh;
+  }
+  .v-window__container {
+    height: 100% !important;
   }
 </style>

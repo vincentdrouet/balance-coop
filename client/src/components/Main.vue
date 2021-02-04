@@ -14,36 +14,35 @@
             group>
             <v-container
               class="filters d-flex flex-column pa-0 ma-0 justify-space-around"
+              width="100%"
             >
-              <v-spacer></v-spacer>
-              <v-row>
-                <v-btn value="fruit" width="120px" height="80px">Fruits</v-btn>
-                <v-btn value="legume" width="120px" height="80px">Légumes</v-btn>
+              <v-row style="width: 100%; justify-content: center" align-content="center">
+                <v-btn value="fruit" width="45%" height="80px">Fruits</v-btn>
+                <v-btn value="legume" width="45%" height="80px">Légumes</v-btn>
               </v-row>
-              <v-row>
-                <v-btn value="vrac" width="150px" height="80px">Vrac</v-btn>
+              <v-row style="width: 100%; justify-content: center" align-content="center">
+                <v-btn value="vrac" width="50%" height="80px">Vrac</v-btn>
               </v-row>
-              <v-row>
-                <v-btn value="viande" width="120px" height="80px">Viande</v-btn>
-                <v-btn value="poisson" width="120px" height="80px">Poisson</v-btn>
+              <v-row style="width: 100%; justify-content: center" align-content="center">
+                <v-btn value="viande" width="45%" height="80px">Viande</v-btn>
+                <v-btn value="poisson" width="45%" height="80px">Poisson</v-btn>
               </v-row>
-              <v-row>
-                <v-btn value="fruit_sec" width="150px" height="80px">Fruits secs</v-btn>
+              <v-row style="width: 100%; justify-content: center" align-content="center">
+                <v-btn value="fruit_sec" width="50%" height="80px">Fruits secs</v-btn>
               </v-row>
-              <v-row>
-                <v-btn value="autre" width="150px" height="80px">Autres</v-btn>
+              <v-row style="width: 100%; justify-content: center" align-content="center">
+                <v-btn value="autre" width="50%" height="80px">Autres</v-btn>
               </v-row>
             </v-container>
           </v-btn-toggle>
         </v-row>
-        <v-row no-gutters class="refresh-row flex-column">
-          <v-divider class="white"></v-divider>
-          <v-spacer></v-spacer>
+        <v-row no-gutters class="refresh-row flex-column" align-content="center">
+          <v-divider class="white" width="100%"></v-divider>
           <v-btn
             @click="refreshProducts"
             class="align-self-center"
+            style="height: 50%; margin-top: 8%"
           >Rafraichir les produits</v-btn>
-          <v-spacer></v-spacer>
         </v-row>
       </v-col>
       <Products :productsCategory="productsCategory"/>

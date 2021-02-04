@@ -1,18 +1,15 @@
-FROM node:14 AS frontend
+FROM node:14-slim AS frontend
 COPY ./client /app/client
 RUN cd /app/client; \
     npm install; \
     npm run build
 
-FROM python:3.8
-RUN apt update; \
-    apt install -y libsasl2-dev python-dev libldap2-dev libssl-dev; \
-    pip install --upgrade pip; \
-    pip install poetry;
+FROM python:3.8-slim
+RUN pip install poetry;
 WORKDIR /app
 COPY ./pyproject.toml ./poetry.lock /app/
 RUN poetry install;
-COPY ./main.py /app/
+COPY ./main.py logo.jpg /app/
 COPY ./api /app/api
 COPY --from=frontend /app/client/dist /app/client/dist
 CMD ["poetry", "run", "python", "main.py"]

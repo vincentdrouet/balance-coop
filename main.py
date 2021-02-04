@@ -1,10 +1,11 @@
 import logging
 import os
 
-from flask import Flask, jsonify, send_file, session
+from flask import Flask, jsonify, request, send_file, session
 from flask_socketio import SocketIO, emit
 
 from api.odoo import variable_weight_products
+from api.printer import print_product_label
 from api.scale import Scale
 
 ALLOW_ALL_ORIGINS = os.environ.get("ALLOW_ALL_ORIGINS", "False").lower() in [
@@ -25,7 +26,16 @@ def products():
     return jsonify(variable_weight_products())
 
 
-@app.route("/api/ping")
+@app.route("/print_label", methods=["POST"])
+def print_label():
+    data = request.json
+    print_product_label(
+        data.get("product", {}), data.get("weight", 0.0), data.get("cut", False)
+    )
+    return jsonify({"print": "ok"})
+
+
+@app.route("/ping")
 def ping():
     return jsonify({"name": "balance-coop", "status": "ok"})
 
@@ -34,7 +44,8 @@ def ping():
 def allow_all_origins(response):
     if ALLOW_ALL_ORIGINS:
         response.headers["Access-Control-Allow-Origin"] = "*"
-        response.headers["Access-Control-Allow-Methods"] = "GET"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "*"
     return response
 
 
@@ -57,7 +68,7 @@ def on_connect():
 @socket_io.on("disconnect")
 def on_disconnect():
     logging.info("Disconnected ...")
-    if session.get("clients_nb", 0) == 1 and session.get("scale", None):
+    if session.get("clients_nb", 0) == 1 and session.get("scale"):
         session["scale"].stop()
         session["scale"] = None
     session["clients_nb"] -= 1

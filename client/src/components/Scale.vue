@@ -6,18 +6,18 @@
     <v-spacer></v-spacer>
     <v-row>
       <v-col>
-        <h1 :class="weight>0?'white--text text-right':'orange--text text-right'">Poids :</h1>
+        <h2 :class="weight>0?'white--text text-right':'orange--text text-right'">Poids :</h2>
       </v-col>
       <v-col>
-        <h1 :class="weight>0?'white--text':'orange--text'">{{ Number((weight).toFixed(3)) }}</h1>
+        <h2 :class="weight>0?'white--text':'orange--text'">{{ Number((weight).toFixed(3)) }}</h2>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <h1 :class="tare>0?'orange--text text-right':'white--text text-right'">Tare :</h1>
+        <h3 :class="tare>0?'orange--text text-right':'white--text text-right'">Tare :</h3>
       </v-col>
       <v-col>
-        <h1 :class="tare>0?'orange--text':'white--text'">{{ Number((tare).toFixed(3)) }}</h1>
+        <h3 :class="tare>0?'orange--text':'white--text'">{{ Number((tare).toFixed(3)) }}</h3>
       </v-col>
     </v-row>
     <v-divider class="white"></v-divider>
