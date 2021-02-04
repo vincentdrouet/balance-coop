@@ -8,17 +8,20 @@ from api.odoo import variable_weight_products
 from api.printer import print_product_label
 from api.scale import Scale
 
-ALLOW_ALL_ORIGINS = os.environ.get("ALLOW_ALL_ORIGINS", "False").lower() in [
+ALLOW_ALL_ORIGINS = os.getenv("ALLOW_ALL_ORIGINS", "False").lower() in [
     "true",
     "1",
 ]
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5000")
 
 logging.basicConfig(
     format="[%(asctime)s] - %(levelname)s: %(message)s", level=logging.INFO
 )
 
 app = Flask(__name__, static_folder="./client/dist/")
-socket_io = SocketIO(app, cors_allowed_origins="*" if ALLOW_ALL_ORIGINS else "")
+socket_io = SocketIO(
+    app, cors_allowed_origins="*" if ALLOW_ALL_ORIGINS else CORS_ALLOWED_ORIGINS
+)
 
 
 @app.route("/products")
