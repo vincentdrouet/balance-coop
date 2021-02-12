@@ -38,11 +38,49 @@
         </v-row>
         <v-row no-gutters class="refresh-row flex-column" align-content="center">
           <v-divider class="white" width="100%"></v-divider>
-          <v-btn
-            @click="refreshProducts"
-            class="align-self-center"
-            style="height: 50%; margin-top: 8%"
-          >Rafraichir les produits</v-btn>
+          <v-menu
+            top
+            :offset-y="true"
+            class="white"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                fab
+                class="align-self-center"
+                style="margin-top: 6%"
+              >
+                <v-icon>
+                  mdi-wrench
+                </v-icon>
+              </v-btn>
+            </template>
+
+            <v-container
+              style="height: 160px"
+              class="pa-0 ma-0"
+            >
+              <v-row class="pa-0 ma-0">
+                <v-btn
+                  @click="refreshProducts"
+                  height="80px"
+                  width="100%"
+                >
+                  Rafraichir les produits
+                </v-btn>
+              </v-row>
+              <v-row class="pa-0 ma-0">
+                <v-btn
+                  @click="printLabel"
+                  height="80px"
+                  width="100%"
+                >
+                  Couper le ticket
+                </v-btn>
+              </v-row>
+            </v-container>
+          </v-menu>
         </v-row>
       </v-col>
       <Products :productsCategory="productsCategory"/>
@@ -53,6 +91,7 @@
 <script>
 import Products from './Products.vue';
 import Scale from './Scale.vue';
+import print from '../mixin/print';
 
 export default {
   name: 'Main',
@@ -71,6 +110,13 @@ export default {
   methods: {
     refreshProducts() {
       this.$store.dispatch('products/get');
+    },
+    printLabel() {
+      print(
+        null,
+        null,
+        true,
+      );
     },
   },
 };
