@@ -1,6 +1,8 @@
 # Balance COOP
 This is the scale service for La Chouette COOP.
 
+![DEMO](./demo.gif)
+
 ### Requirement
 You will need :
 - docker
@@ -36,9 +38,9 @@ Then run
 docker-compose up -d
 ```
 
-API will be accessible to http://localhost:8000/
+API will be accessible to http://localhost:5000/
 ```bash
-curl http://localhost:8000/ping
+curl http://localhost:5000/ping
 ```
 It shall respond `{"name":"balance-coop","status":"ok"}`
 
