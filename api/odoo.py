@@ -9,7 +9,7 @@ from aio_odoorpc_base.helpers import execute_kwargs
 from tinydb import TinyDB
 from typing import List, Dict
 
-ODOO_URL = os.getenv("ODOO_URL", "https://test.sas.lachouettecoop.fri/jsonrpc")
+ODOO_URL = os.getenv("ODOO_URL", "https://test.sas.lachouettecoop.fr/jsonrpc")
 ODOO_DB = os.getenv("ODOO_DB", "dbsas")
 ODOO_LOGIN = os.getenv("ODOO_LOGIN")
 ODOO_PASSWORD = os.getenv("ODOO_PASSWORD")
@@ -51,13 +51,16 @@ UNWANTED_NAME_CHUNKS_PATTERNS = [
 
 
 def _load_from_db():
+    if not os.path.exists(TINYDB_PATH):
+        return {}
     db = TinyDB(TINYDB_PATH)
     products_table = db.table(PRODUCTS_TABLE)
     return products_table.all()
 
 
 def _save_in_db(products):
-    os.remove(TINYDB_PATH)
+    if os.path.exists(TINYDB_PATH):
+        os.remove(TINYDB_PATH)
     db = TinyDB(TINYDB_PATH)
     products_table = db.table(PRODUCTS_TABLE)
     for product in products:
@@ -119,8 +122,8 @@ def variable_weight_products():
                 args=[
                     ["active", "=", True],
                     ["sale_ok", "=", True],
-                    # In 'La Chouette Coop', all variable weight products have a barcode starting with 2600
-                    ["barcode", "like", "2600_________"],
+                    # In 'La Chouette Coop', all variable weight products have a barcode starting with 260
+                    ["barcode", "like", "260__________"],
                 ],
                 kw=kwargs,
             )

@@ -1,20 +1,23 @@
 <template>
   <v-list-item-content class="pa-0 ma-0">
       <v-card>
-        <v-card-title class="pb-1 pr-0">{{ product.name }}</v-card-title>
+        <v-card-title class="pb-1 pr-0">
+          {{ product.name }}
+        </v-card-title>
         <v-card-text class="pr-0">
           <v-row class="pa-0 ma-0">
             <v-col class="pa-0 ma-0">
               <v-img
                 v-if="product.image_medium"
                 :src="'data:image/jpeg;base64,'+product.image_medium"
-                max-width="200"
+                :aspect-ratio="4/3"
+                height="90%"
               />
               <v-img
                 v-else
                 src="@/assets/logo.png"
-                max-height="140"
-                max-width="140"
+                :aspect-ratio="4/3"
+                height="100%"
                 class="mx-auto"
               />
             </v-col>
@@ -31,26 +34,26 @@
             <v-col class="pa-0 ma-0 align-self-center" align="center" v-if="selected">
               <v-row>
                 <v-col>
-                  <h2 :class="weight>0?'text-right':'orange--text text-right'">
+                  <h1 :class="weight>0&&weight<100?'text-right':'orange--text text-right'">
                     Poids :
-                  </h2>
+                  </h1>
                 </v-col>
                 <v-col>
-                  <h2 :class="weight>0?'text-left':'orange--text'">
+                  <h1 :class="weight>0&&weight<100?'text-left':'orange--text'">
                     {{ Number((weight).toFixed(3)) }} kg
-                  </h2>
+                  </h1>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
-                  <h1 :class="weight>0?'text-right':'orange--text text-right'">
-                    Prix :
-                  </h1>
+                  <h2 :class="weight>0&&weight<100?'text-right':'orange--text text-right'">
+                    Prix * :
+                  </h2>
                 </v-col>
                 <v-col>
-                  <h1 :class="weight>0?'text-left':'orange--text'">
+                  <h2 :class="weight>0&&weight<100?'text-left':'orange--text'">
                     {{ asEuro(product.theoritical_price * weight) }}
-                  </h1>
+                  </h2>
                 </v-col>
               </v-row>
             </v-col>
@@ -76,18 +79,23 @@
             </v-btn>
             <v-btn width="200px" height="80px"
                    @click="printLabel(false)"
-                   :disabled="weight<=0">
+                   :disabled="weight<=0 || weight>=100">
               Valider
             </v-btn>
             <v-btn width="200px" height="80px"
                    @click="printLabel(true)"
-                   :disabled="weight<=0">
+                   :disabled="weight<=0 || weight>=100">
               Valider<br/>et<br/>Couper le ticket
             </v-btn>
           </v-card-actions>
           <v-card-actions v-if="selected && weightChange">
             <Keyboard @pressed="pressed"/>
           </v-card-actions>
+          <v-card-text class="pr-0">
+            <h4>
+              * Le prix est donné à titre indicatif. Le calcul se fera en caisse au regard du poid.
+            </h4>
+          </v-card-text>
         </template>
       </v-card>
   </v-list-item-content>
@@ -95,9 +103,8 @@
 
 <script>
 
-import axios from 'axios';
 import Keyboard from './Keyboard.vue';
-import serverUrl from '../mixin/url';
+import print from '../mixin/print';
 
 export default {
   name: 'Product',
@@ -142,11 +149,11 @@ export default {
     },
     printLabel(cut) {
       this.printInProgress = true;
-      axios({
-        method: 'post',
-        url: `${serverUrl()}/print_label`,
-        data: { product: this.product, weight: this.weight, cut },
-      }).then(() => {
+      print(
+        this.product,
+        this.weight,
+        cut,
+      ).then(() => {
         this.printInProgress = false;
         this.$emit('cancel');
       }).catch(() => {

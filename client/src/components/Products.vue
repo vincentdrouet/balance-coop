@@ -24,7 +24,7 @@
         color="indigo"
         style="height: 100%"
       >
-        <v-card-actions class="justify-space-between"  style="height: 10%">
+        <v-card-actions class="justify-space-around" style="height: 10%">
           <v-btn
             depressed
             outlined
@@ -35,8 +35,9 @@
           </v-btn>
           <v-item-group
             v-model="onBoarding"
-            class="text-center"
+            class="text-center d-flex justify-space-between"
             mandatory
+            style="width: 100%"
           >
             <v-item
               v-for="n in bagsOfProducts.length"
@@ -46,10 +47,13 @@
               <v-btn
                 :input-value="active"
                 icon
-                x-large
+                :width="bagsOfProducts.length<25?'56px':'18px'"
+                :height="bagsOfProducts.length<25?'56px':'18px'"
                 @click="toggle"
               >
-                <v-icon>mdi-record</v-icon>
+                <v-icon :x-large="bagsOfProducts.length<25">
+                  mdi-record
+                </v-icon>
               </v-btn>
             </v-item>
           </v-item-group>

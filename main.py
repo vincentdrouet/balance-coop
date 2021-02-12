@@ -26,7 +26,8 @@ socket_io = SocketIO(
 
 @app.route("/products")
 def products():
-    return jsonify(variable_weight_products())
+    _products = variable_weight_products()
+    return jsonify(_products)
 
 
 @app.route("/print_label", methods=["POST"])
