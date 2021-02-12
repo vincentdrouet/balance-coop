@@ -3,6 +3,10 @@ name = "balance-coop"
 version = "0.1.0"
 description = ""
 authors = ["Vincent Bisserie <vbisserie@gmail.com>"]
+packages = [
+    { include = "main.py" },
+    { include = "api" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -22,3 +26,6 @@ pre-commit = "^2.9.3"
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
+
+[tool.poetry.scripts]
+balance-coop = 'main:main'

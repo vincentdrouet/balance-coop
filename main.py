@@ -79,7 +79,7 @@ def on_disconnect():
 
 
 @app.route("/")
-def main():
+def web():
     index_path = os.path.join(app.static_folder, "index.html")
     return send_file(index_path)
 
@@ -98,5 +98,9 @@ def route_frontend(path):
         return send_file(index_path)
 
 
-if __name__ == "__main__":
+def main():
     app.run(debug=True, host="0.0.0.0", port=5000)
+
+
+if __name__ == "__main__":
+    main()
