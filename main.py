@@ -13,12 +13,13 @@ ALLOW_ALL_ORIGINS = os.getenv("ALLOW_ALL_ORIGINS", "False").lower() in [
     "1",
 ]
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5000")
+STATIC_PATH = os.getenv("STATIC_PATH", "./client/dist/")
 
 logging.basicConfig(
     format="[%(asctime)s] - %(levelname)s: %(message)s", level=logging.INFO
 )
 
-app = Flask(__name__, static_folder="./client/dist/")
+app = Flask(__name__, static_folder=STATIC_PATH)
 socket_io = SocketIO(
     app, cors_allowed_origins="*" if ALLOW_ALL_ORIGINS else CORS_ALLOWED_ORIGINS
 )
