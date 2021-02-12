@@ -4,12 +4,18 @@ RUN cd /app/client; \
     npm install; \
     npm run build
 
-FROM python:3.8-slim
-RUN pip install poetry
+FROM python:3.8-slim AS backend
 WORKDIR /app
-COPY ./pyproject.toml ./poetry.lock /app/
-RUN poetry install
-COPY ./main.py logo.jpg /app/
+COPY ./pyproject.toml ./poetry.lock ./main.py /app/
 COPY ./api /app/api
+RUN pip install poetry; \
+    poetry build -f wheel;
+
+FROM python:3.8-slim
+WORKDIR /app
 COPY --from=frontend /app/client/dist /app/client/dist
-CMD ["poetry", "run", "python", "main.py"]
+COPY --from=backend /app/dist/balance_coop-*-py3-none-any.whl /tmp
+COPY logo.jpg /app/
+RUN pip install /tmp/balance_coop-*-py3-none-any.whl; \
+    rm /tmp/balance_coop-*-py3-none-any.whl;
+CMD ["balance-coop"]
