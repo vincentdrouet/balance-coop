@@ -18,10 +18,11 @@ def print_product_label(product, weight, cut):
         if product and 0 <= weight < 100:
             name = product.get("name")
             bio = product.get("bio", False)
-            cg = math.floor(weight * 10000)  # centigrams
-            barcode = f"{product.get('barcode')[0:7]}{cg:06d}"  # 2600<Product ID><Weight> / <4digits><4digits><6digits>
+            cg = math.floor(weight * 1000)  # grams
+            # <260><Product ID><Weight><CheckSum> / <3digits><4digits><5digits><1digit>
+            barcode = f"{product.get('barcode')[0:7]}{cg:05d}"
             printer.textln(f"{name}{' BIO' if bio else ''} - {weight:.3f} Kg")
-            printer.barcode(barcode, "EAN13", 128, 2, "", "")
+            printer.barcode(barcode, "EAN13", height=128, width=2)
             printer.ln()
         if cut:
             printer.image(img_source="logo.jpg")
