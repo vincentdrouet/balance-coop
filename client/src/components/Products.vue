@@ -1,5 +1,8 @@
 <template>
-  <v-col>
+  <v-col
+    class="pa-0 ma-0"
+    style="height: 100vh"
+  >
     <v-dialog
       v-if="selectedProduct"
       v-model="selectedProduct"
@@ -35,7 +38,7 @@
           </v-btn>
           <v-item-group
             v-model="onBoarding"
-            class="text-center d-flex justify-space-between"
+            class="text-center d-flex justify-space-around"
             mandatory
             style="width: 100%"
           >
@@ -47,8 +50,8 @@
               <v-btn
                 :input-value="active"
                 icon
-                :width="bagsOfProducts.length<25?'56px':'18px'"
-                :height="bagsOfProducts.length<25?'56px':'18px'"
+                width="56px"
+                height="56px"
                 @click="toggle"
               >
                 <v-icon :x-large="bagsOfProducts.length<25">
@@ -66,7 +69,7 @@
             <v-icon>mdi-chevron-right</v-icon>
           </v-btn>
         </v-card-actions>
-        <v-window v-model="onBoarding" style="height: 90%">
+        <v-window v-model="onBoarding" style="height: 85%">
           <v-window-item
             v-for="(page, p) in bagsOfProducts"
             :key="`page-${p}`"
@@ -79,6 +82,7 @@
                 v-for="(row, r) in page"
                 :key="`row-${r}`"
                 class="pa-0 ma-0"
+                :style="`height: ${100/rowsNb}%`"
               >
                 <v-col
                   v-for="(product, c) in row"
@@ -88,6 +92,7 @@
                   <v-list-item
                     v-if="product"
                     class="pa-0 ma-0"
+                    style="height: 100%"
                     three-line
                     :value="product">
                     <Product :product="product"/>
@@ -112,7 +117,9 @@ export default {
     Product,
   },
   props: {
+    filter: String,
     productsCategory: String,
+    withSomeQty: Boolean,
   },
   data: () => ({
     selectedProduct: null,
@@ -139,6 +146,7 @@ export default {
       }
     },
     cancelSelection() {
+      this.$emit('clearFilter');
       this.selectedProduct = null;
     },
   },
@@ -169,12 +177,23 @@ export default {
       return bagsOfProducts;
     },
     products() {
-      if (this.productsCategory) {
-        return this.$store.state.products.products.filter(
-          (product) => product.categ === this.productsCategory,
-        );
+      let { products } = this.$store.state.products;
+      if (this.filter) {
+        products = products.filter((product) => {
+          if (String(product.id).startsWith(this.filter)) {
+            return true;
+          }
+          const name = product.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+          return name.includes(this.filter.toLowerCase());
+        });
       }
-      return this.$store.state.products.products;
+      if (this.productsCategory) {
+        products = products.filter((product) => product.category === this.productsCategory);
+      }
+      if (this.withSomeQty) {
+        products = products.filter((product) => product.qty_available > 0);
+      }
+      return products;
     },
     inProgress() {
       return this.$store.state.products.inProgress;

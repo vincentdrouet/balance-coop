@@ -14,6 +14,10 @@ ODOO_DB = os.getenv("ODOO_DB", "dbsas")
 ODOO_LOGIN = os.getenv("ODOO_LOGIN")
 ODOO_PASSWORD = os.getenv("ODOO_PASSWORD")
 
+# This is use to filter categories before send them to front
+# For a scale used for fruits and vegetable no need to show all the others
+CATEGORIES = os.getenv("CATEGORIES", "fruit legume").split()
+
 TINYDB_PATH = os.getenv("TINYDB_PATH", "./data/odoo.json")
 PRODUCTS_TABLE = "products"
 
@@ -44,6 +48,7 @@ UNWANTED_NAME_CHUNKS = [
     " sous vide",
     " ss vide",
     " à la pièce",
+    " maraîcher",
 ]
 UNWANTED_NAME_CHUNKS_PATTERNS = [
     re.compile(u, re.IGNORECASE) for u in UNWANTED_NAME_CHUNKS
@@ -74,22 +79,22 @@ def _consolidate(products: List[Dict]):
             name = p.sub("", name)
         product["name"] = name.strip()
         product["bio"] = product["name_template"].find(" Bio") >= 0
-        product["id"] = int(product["barcode"][3:6])
+        product["id"] = int(product["barcode"][3:7])
         categ_id = product["categ_id"][0]
-        if categ_id in VRAC:
-            product["categ"] = "vrac"
-        elif categ_id in FRUITS:
-            product["categ"] = "fruit"
-        elif categ_id in LEGUMES:
-            product["categ"] = "legume"
-        elif categ_id in VIANDE:
-            product["categ"] = "viande"
-        elif categ_id in POISSON:
-            product["categ"] = "poisson"
-        elif categ_id in FRUITS_SECS:
-            product["categ"] = "fruit_sec"
+        if categ_id in VRAC and "vrac" in CATEGORIES:
+            product["category"] = "vrac"
+        elif categ_id in FRUITS and "fruit" in CATEGORIES:
+            product["category"] = "fruit"
+        elif categ_id in LEGUMES and "legume" in CATEGORIES:
+            product["category"] = "legume"
+        elif categ_id in VIANDE and "viande" in CATEGORIES:
+            product["category"] = "viande"
+        elif categ_id in POISSON and "poisson" in CATEGORIES:
+            product["category"] = "poisson"
+        elif categ_id in FRUITS_SECS and "fruit_sec" in CATEGORIES:
+            product["category"] = "fruit_sec"
         else:
-            product["categ"] = "autre"
+            product["category"] = "autre"
 
 
 def variable_weight_products():
@@ -109,6 +114,7 @@ def variable_weight_products():
                     "image_medium",
                     "name_template",
                     "theoritical_price",
+                    "qty_available",
                 ]
             )
             products = execute_kw(

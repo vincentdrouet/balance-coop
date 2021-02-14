@@ -2,11 +2,11 @@
   <v-list-item-content class="pa-0 ma-0">
       <v-card>
         <v-card-title class="pb-1 pr-0">
-          {{ product.name }}
+          <h4>{{ product.name }}</h4>
         </v-card-title>
-        <v-card-text class="pr-0">
-          <v-row class="pa-0 ma-0">
-            <v-col class="pa-0 ma-0">
+        <v-card-text class="pa-0 ma-0">
+          <v-row class="pa-0 ma-0 pr-4">
+            <v-col class="pa-0 ma-0 pl-4">
               <v-img
                 v-if="product.image_medium"
                 :src="'data:image/jpeg;base64,'+product.image_medium"
@@ -21,8 +21,12 @@
                 class="mx-auto"
               />
             </v-col>
-            <v-col  class="pa-0 ma-0 d-flex flex-column justify-start align-center">
-              <h2>{{ asEuro(product.theoritical_price) }} / kg</h2>
+            <v-col
+              class="pa-0 ma-0 d-flex flex-column justify-start align-center"
+              style="height: 100%"
+            >
+              <h2>Id. {{ product.id }}</h2>
+              <h2><br/>{{ asEuro(product.theoritical_price) }} / kg</h2>
               <v-img
                 v-if="product.bio"
                 src="@/assets/bio.jpeg"
@@ -34,14 +38,14 @@
             <v-col class="pa-0 ma-0 align-self-center" align="center" v-if="selected">
               <v-row>
                 <v-col>
-                  <h1 :class="weight>0&&weight<100?'text-right':'orange--text text-right'">
+                  <h2 :class="weight>0&&weight<100?'text-right':'orange--text text-right'">
                     Poids :
-                  </h1>
+                  </h2>
                 </v-col>
                 <v-col>
-                  <h1 :class="weight>0&&weight<100?'text-left':'orange--text'">
+                  <h2 :class="weight>0&&weight<100?'text-left':'orange--text'">
                     {{ Number((weight).toFixed(3)) }} kg
-                  </h1>
+                  </h2>
                 </v-col>
               </v-row>
               <v-row>
@@ -89,9 +93,9 @@
             </v-btn>
           </v-card-actions>
           <v-card-actions v-if="selected && weightChange">
-            <Keyboard @pressed="pressed"/>
+            <Keyboard @pressed="pressed" onlyNum/>
           </v-card-actions>
-          <v-card-text class="pr-0">
+          <v-card-text v-if="selected" class="pr-0">
             <h4>
               * Le prix est donné à titre indicatif. Le calcul se fera en caisse au regard du poid.
             </h4>
