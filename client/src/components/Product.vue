@@ -63,44 +63,44 @@
             </v-col>
           </v-row>
         </v-card-text>
-        <v-progress-circular
-          indeterminate
-          :size="100"
-          :width="7"
-          color="primary"
-          v-if="printInProgress && selected"
-        />
-        <template v-else>
-          <v-card-actions v-if="selected" class="justify-space-around">
-            <v-btn width="200px" height="80px"
-                   @click="$emit('cancel')">
-              Annuler
-            </v-btn>
-            <v-btn width="200px" height="80px"
-                   @click="weightChange=!weightChange"
-                   :input-value="weightChange">
-              Modifier le poids
-            </v-btn>
-            <v-btn width="200px" height="80px"
-                   @click="printLabel(false)"
-                   :disabled="weight<=0 || weight>=100">
-              Valider
-            </v-btn>
-            <v-btn width="200px" height="80px"
-                   @click="printLabel(true)"
-                   :disabled="weight<=0 || weight>=100">
-              Valider<br/>et<br/>Couper le ticket
-            </v-btn>
-          </v-card-actions>
-          <v-card-actions v-if="selected && weightChange">
-            <Keyboard @pressed="pressed" onlyNum/>
-          </v-card-actions>
-          <v-card-text v-if="selected" class="pr-0">
-            <h4>
-              * Le prix est donné à titre indicatif. Le calcul se fera en caisse au regard du poid.
-            </h4>
-          </v-card-text>
-        </template>
+        <v-card-actions v-if="printInProgress && selected"  class="justify-center">
+          <v-progress-circular
+            indeterminate
+            :size="100"
+            :width="7"
+            color="primary"
+            v-if="printInProgress && selected"
+          />
+        </v-card-actions>
+        <v-card-actions v-else-if="selected" class="justify-space-around">
+          <v-btn width="200px" height="80px"
+                 @click="$emit('cancel')">
+            Annuler
+          </v-btn>
+          <v-btn width="200px" height="80px"
+                 @click="weightChange=!weightChange"
+                 :input-value="weightChange">
+            Modifier le poids
+          </v-btn>
+          <v-btn width="200px" height="80px"
+                 @click="printLabel(false)"
+                 :disabled="weight<=0 || weight>=100">
+            Valider
+          </v-btn>
+          <v-btn width="200px" height="80px"
+                 @click="printLabel(true)"
+                 :disabled="weight<=0 || weight>=100">
+            Valider<br/>et<br/>Couper le ticket
+          </v-btn>
+        </v-card-actions>
+        <v-card-actions v-if="selected && weightChange">
+          <Keyboard @pressed="pressed" onlyNum/>
+        </v-card-actions>
+        <v-card-text v-if="selected" class="pr-0">
+          <h4>
+            * Le prix est donné à titre indicatif. Le calcul se fera en caisse au regard du poid.
+          </h4>
+        </v-card-text>
       </v-card>
   </v-list-item-content>
 </template>
