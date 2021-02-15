@@ -18,6 +18,7 @@ STATIC_PATH = os.getenv("STATIC_PATH", "./client/dist/")
 logging.basicConfig(
     format="[%(asctime)s] - %(levelname)s: %(message)s", level=logging.INFO
 )
+logging.getLogger("werkzeug").setLevel(logging.WARN)
 
 app = Flask(__name__, static_folder=STATIC_PATH)
 socket_io = SocketIO(
