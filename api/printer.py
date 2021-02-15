@@ -1,11 +1,26 @@
 import logging
 import math
 import os
+import socket
 
 from datetime import datetime
 from escpos.printer import Network
 
 PRINTER_IP = os.getenv("PRINTER_IP")
+
+
+# Network close is called on __del__ and could raise OSError
+def close(self):
+    """ Close TCP connection """
+    if self.device is not None:
+        try:
+            self.device.shutdown(socket.SHUT_RDWR)
+            self.device.close()
+        except OSError:
+            pass
+
+
+Network.close = close
 
 
 def print_product_label(product, weight, cut):
