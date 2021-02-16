@@ -1,4 +1,5 @@
 import httpx
+import json
 import logging
 import os
 import re
@@ -6,7 +7,6 @@ import re
 from aio_odoorpc_base.sync.common import login as odoo_login
 from aio_odoorpc_base.sync.object import execute_kw
 from aio_odoorpc_base.helpers import execute_kwargs
-from tinydb import TinyDB
 from typing import List, Dict
 
 ODOO_URL = os.getenv("ODOO_URL", "https://test.sas.lachouettecoop.fr/jsonrpc")
@@ -18,7 +18,7 @@ ODOO_PASSWORD = os.getenv("ODOO_PASSWORD")
 # For a scale used for fruits and vegetable no need to show all the others
 CATEGORIES = os.getenv("CATEGORIES", "fruit legume").split()
 
-TINYDB_PATH = os.getenv("TINYDB_PATH", "./data/odoo.json")
+DATA_PATH = os.getenv("DATA_PATH", "./data/odoo.json")
 PRODUCTS_TABLE = "products"
 
 # 139 - EPICERIE / VRAC
@@ -55,21 +55,18 @@ UNWANTED_NAME_CHUNKS_PATTERNS = [
 ]
 
 
-def _load_from_db():
-    if not os.path.exists(TINYDB_PATH):
-        return {}
-    db = TinyDB(TINYDB_PATH)
-    products_table = db.table(PRODUCTS_TABLE)
-    return products_table.all()
+def _load_from_file():
+    if not os.path.exists(DATA_PATH):
+        return []
+    with open(DATA_PATH) as json_file:
+        return json.load(json_file)
 
 
-def _save_in_db(products):
-    if os.path.exists(TINYDB_PATH):
-        os.remove(TINYDB_PATH)
-    db = TinyDB(TINYDB_PATH)
-    products_table = db.table(PRODUCTS_TABLE)
-    for product in products:
-        products_table.insert(product)
+def _save_in_file(products):
+    if os.path.exists(DATA_PATH):
+        os.remove(DATA_PATH)
+    with open(DATA_PATH, "w") as json_file:
+        json.dump(products, json_file)
 
 
 def _consolidate(products: List[Dict]):
@@ -135,8 +132,8 @@ def variable_weight_products():
             )
             logging.info(f"{len(products)} products found")
             _consolidate(products)
-            _save_in_db(products)
+            _save_in_file(products)
             return products
     except Exception as e:
         logging.error(e)
-        return _load_from_db()
+        return _load_from_file()

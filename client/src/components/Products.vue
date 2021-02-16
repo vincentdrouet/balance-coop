@@ -12,7 +12,9 @@
     </v-dialog>
     <v-container
       v-if="inProgress"
-      class="d-flex flex-column align-self-center">
+      class="d-flex flex-column justify-center"
+      style="height: 100%; width: 100%; align-items: center"
+    >
       <h2>La mise à jour des produits peut prendre un certain temps.<br/>Merci de patienter.</h2>
       <v-progress-circular
         indeterminate

@@ -543,14 +543,6 @@ python-versions = ">=3.5"
 version = "1.2.0"
 
 [[package]]
-category = "main"
-description = "TinyDB is a tiny, document oriented database optimized for your happiness :)"
-name = "tinydb"
-optional = false
-python-versions = ">=3.5,<4.0"
-version = "4.4.0"
-
-[[package]]
 category = "dev"
 description = "Python Library for Tom's Obvious, Minimal Language"
 name = "toml"
@@ -622,7 +614,7 @@ termcolor = ["termcolor"]
 watchdog = ["watchdog"]
 
 [metadata]
-content-hash = "b721c647eb80a08322eb62fb49e2f129bd7bf1829b71acc0737b06124923cd0b"
+content-hash = "0c0a46c2bf2385c5875ea32784ce19ed0cd1c48d8b6bb733f161c00cbe3b1333"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -934,10 +926,6 @@ six = [
 sniffio = [
     {file = "sniffio-1.2.0-py3-none-any.whl", hash = "sha256:471b71698eac1c2112a40ce2752bb2f4a4814c22a54a3eed3676bc0f5ca9f663"},
     {file = "sniffio-1.2.0.tar.gz", hash = "sha256:c4666eecec1d3f50960c6bdf61ab7bc350648da6c126e3cf6898d8cd4ddcd3de"},
-]
-tinydb = [
-    {file = "tinydb-4.4.0-py3-none-any.whl", hash = "sha256:30b0f718ebb288e42d2f69f3e1b18928739f25153e6b5308a234e95c1673de71"},
-    {file = "tinydb-4.4.0.tar.gz", hash = "sha256:d57c29524ecacc081ebc24f96e0d787bba11dc20d52634a32a709b878be3545a"},
 ]
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
