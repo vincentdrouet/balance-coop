@@ -27,6 +27,24 @@
               >
                 <v-btn :value="category" width="50%" height="80px">{{ category }}</v-btn>
               </v-row>
+              <v-row style="width: 100%; justify-content: center; align-content: center">
+                <v-checkbox
+                  width="100%"
+                  dark
+                  class="pa-4"
+                  v-model="onlyBio"
+                  hide-details
+                  label="Uniquement les produits BIO"
+                ></v-checkbox>
+                <v-checkbox
+                  width="100%"
+                  dark
+                  class="pa-4"
+                  v-model="withSomeQty"
+                  hide-details
+                  label="Uniquement avec stock > 0"
+                ></v-checkbox>
+              </v-row>
             </v-container>
           </v-btn-toggle>
         </v-row>
@@ -88,17 +106,6 @@
               style="height: 100%; background-color: white"
             >
               <v-row class="pa-0 ma-0" align="center">
-                <v-checkbox
-                  height="80px"
-                  width="100%"
-                  class="pa-0 ma-0"
-                  style="background-color: white"
-                  v-model="withSomeQty"
-                  hide-details
-                  label="Afficher uniquement les produits avec du stock"
-                ></v-checkbox>
-              </v-row>
-              <v-row class="pa-0 ma-0" align="center">
                 <v-btn
                   @click="refreshProducts"
                   height="80px"
@@ -118,6 +125,7 @@
         :filter="filter"
         :productsCategory="productsCategory"
         :withSomeQty="withSomeQty"
+        :onlyBio="onlyBio"
         @clearFilter="clearFilter"
       />
     </v-row>
@@ -139,7 +147,8 @@ export default {
   },
   data: () => ({
     productsCategory: null,
-    withSomeQty: true,
+    withSomeQty: false,
+    onlyBio: false,
     filter: null,
     freeze: false,
   }),

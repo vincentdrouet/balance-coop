@@ -1,7 +1,6 @@
 import logging
-import socket
 import os
-
+import socket
 from threading import Thread
 from time import sleep
 

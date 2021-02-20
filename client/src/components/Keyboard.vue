@@ -13,6 +13,7 @@
       >
         <v-btn width="100px" height="80px" @click="press(c)">
           <v-icon v-if="c==='SUPPR'">mdi-backspace</v-icon>
+          <v-icon v-else-if="c==='SPACE'">mdi-keyboard-space</v-icon>
           <p v-else>{{ c }}</p>
         </v-btn>
       </v-col>
@@ -37,12 +38,15 @@ export default {
         if (this.value) {
           this.value = this.value.slice(0, -1);
         }
+      } else if (key === 'SPACE') {
+        if (this.value && this.value.slice(-1) !== ' ') {
+          this.value = `${this.value} `;
+        }
       } else {
         if (this.onlyNum && !this.value && key === '.') {
           this.value = '0';
         }
         this.value = `${this.value}${key}`;
-        this.value = this.value.trim();
       }
     },
     isValid() {
@@ -71,7 +75,7 @@ export default {
         ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
         ['A', 'Z', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
         ['Q', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M'],
-        ['W', 'X', 'C', 'V', 'B', 'N', 'SUPPR'],
+        ['SPACE', 'W', 'X', 'C', 'V', 'B', 'N', 'SUPPR'],
       ];
     },
     getValue() {
@@ -81,7 +85,7 @@ export default {
       return this.value;
     },
     defaultValue() {
-      return this.onlyNum ? '0' : ' ';
+      return this.onlyNum ? '0' : '';
     },
     resetValue() {
       this.value = this.defaultValue();
