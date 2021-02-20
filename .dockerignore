@@ -1,0 +1,17 @@
+.git/
+.idea/
+.venv/
+data/
+.gitignore
+.pre-commit-config.yaml
+api.env
+docker-compose.yaml
+docker-compose.yaml.prod
+Dockerfile
+LICENSE
+README.md
+
+client/node_modules/
+client/dist/
+client/.gitignore
+client/README.md
