@@ -1,13 +1,13 @@
-import httpx
 import json
 import logging
 import os
 import re
+from typing import Dict, List
 
+import httpx
+from aio_odoorpc_base.helpers import execute_kwargs
 from aio_odoorpc_base.sync.common import login as odoo_login
 from aio_odoorpc_base.sync.object import execute_kw
-from aio_odoorpc_base.helpers import execute_kwargs
-from typing import List, Dict
 
 ODOO_URL = os.getenv("ODOO_URL", "https://test.sas.lachouettecoop.fr/jsonrpc")
 ODOO_DB = os.getenv("ODOO_DB", "dbsas")

@@ -120,6 +120,7 @@ export default {
   },
   props: {
     filter: String,
+    onlyBio: Boolean,
     productsCategory: String,
     withSomeQty: Boolean,
   },
@@ -186,8 +187,18 @@ export default {
             return true;
           }
           const name = product.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-          return name.includes(this.filter.toLowerCase());
+          const words = this.filter.toLowerCase().split(' ');
+          for (let i = 0; i < words.length; i += 1) {
+            const word = words[i];
+            if (!name.includes(word.toLowerCase())) {
+              return false;
+            }
+          }
+          return true;
         });
+      }
+      if (this.onlyBio) {
+        products = products.filter((product) => product.bio);
       }
       if (this.productsCategory) {
         products = products.filter((product) => product.category === this.productsCategory);

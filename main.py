@@ -1,11 +1,12 @@
 import logging
 import os
+from logging.config import dictConfig
 
 from flask import Flask, jsonify, request, send_file, session
 from flask_socketio import SocketIO, emit
 
 from api.odoo import variable_weight_products
-from api.printer import print_product_label
+from api.printer import Printer
 from api.scale import Scale
 
 ALLOW_ALL_ORIGINS = os.getenv("ALLOW_ALL_ORIGINS", "False").lower() in [
@@ -15,8 +16,23 @@ ALLOW_ALL_ORIGINS = os.getenv("ALLOW_ALL_ORIGINS", "False").lower() in [
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5000")
 STATIC_PATH = os.getenv("STATIC_PATH", "./client/dist/")
 
-logging.basicConfig(
-    format="[%(asctime)s] - %(levelname)s: %(message)s", level=logging.INFO
+dictConfig(
+    {
+        "version": 1,
+        "formatters": {
+            "default": {
+                "format": "[%(levelname)s] %(module)s: %(message)s",
+            }
+        },
+        "handlers": {
+            "wsgi": {
+                "class": "logging.StreamHandler",
+                "stream": "ext://flask.logging.wsgi_errors_stream",
+                "formatter": "default",
+            }
+        },
+        "root": {"level": "INFO", "handlers": ["wsgi"]},
+    }
 )
 logging.getLogger("werkzeug").setLevel(logging.WARN)
 
@@ -24,6 +40,8 @@ app = Flask(__name__, static_folder=STATIC_PATH)
 socket_io = SocketIO(
     app, cors_allowed_origins="*" if ALLOW_ALL_ORIGINS else CORS_ALLOWED_ORIGINS
 )
+
+printer = Printer()
 
 
 @app.route("/products")
@@ -35,7 +53,7 @@ def products():
 @app.route("/print_label", methods=["POST"])
 def print_label():
     data = request.json
-    print_product_label(
+    printer.print_product_label(
         data.get("product", {}), data.get("weight", 0.0), data.get("cut", False)
     )
     return jsonify({"print": "ok"})

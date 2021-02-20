@@ -1,4 +1,4 @@
-from api.scale.digits import DIGITS, D_MINUS
+from api.scale.digits import D_MINUS, DIGITS
 
 SCREEN_SIZE = (64, 240)  # 64 lines - 240 columns
 DIGIT_SIZE = (14, 8)
