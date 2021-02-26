@@ -50,9 +50,7 @@ UNWANTED_NAME_CHUNKS = [
     " à la pièce",
     " maraîcher",
 ]
-UNWANTED_NAME_CHUNKS_PATTERNS = [
-    re.compile(u, re.IGNORECASE) for u in UNWANTED_NAME_CHUNKS
-]
+UNWANTED_NAME_CHUNKS_PATTERNS = [re.compile(u, re.IGNORECASE) for u in UNWANTED_NAME_CHUNKS]
 
 
 def _load_from_file():
@@ -125,7 +123,8 @@ def variable_weight_products():
                 args=[
                     ["active", "=", True],
                     ["sale_ok", "=", True],
-                    # In 'La Chouette Coop', all variable weight products have a barcode starting with 260
+                    # In 'La Chouette Coop', all variable weight products
+                    # have a barcode starting with 260
                     ["barcode", "like", "260__________"],
                 ],
                 kw=kwargs,

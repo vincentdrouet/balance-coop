@@ -51,8 +51,8 @@ class Printer:
                 self.printer.ln()
             if cut:
                 self.printer.image(img_source="logo.jpg")
-                self.printer.textln(f"Les prix seront calculés en caisse")
-                self.printer.textln(f"Seul le poid est encodé sur le code-barres")
+                self.printer.textln("Les prix seront calculés en caisse")
+                self.printer.textln("Seul le poid est encodé sur le code-barres")
                 self.printer.ln()
                 self.printer.textln(datetime.now().strftime("%m/%d/%Y - %H:%M"))
                 self.printer.cut()

@@ -60,9 +60,7 @@ class Screen:
         weight += 0.1 * self._digit_value(TENTHS_WEIGHT_DIGIT)
         weight += 0.01 * self._digit_value(HUNDREDTHS_WEIGHT_DIGIT)
         weight += 0.001 * self._digit_value(THOUSANDTHS_WEIGHT_DIGIT)
-        if self._digit_minus(TENS_WEIGHT_DIGIT) or self._digit_minus(
-            HUNDREDS_WEIGHT_DIGIT
-        ):
+        if self._digit_minus(TENS_WEIGHT_DIGIT) or self._digit_minus(HUNDREDS_WEIGHT_DIGIT):
             weight *= -1
         return weight
 

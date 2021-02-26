@@ -40,9 +40,7 @@ class Scale(Thread):
                 self._notify()
             else:
                 try:
-                    with socket.socket(
-                        socket.AF_INET, socket.SOCK_STREAM
-                    ) as self._sock:
+                    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as self._sock:
                         self._sock.connect((self.addr, self.port))
                         while self._keep_running:
                             m = Message(self._sock)
@@ -59,9 +57,7 @@ class Scale(Thread):
                             self._weight = s.weight
                             self._tare = s.tare
                             self._notify()
-                            logging.info(
-                                f"Weight: {self._weight:.3f} - Tare: {self._tare:.3f}"
-                            )
+                            logging.info(f"Weight: {self._weight:.3f} - Tare: {self._tare:.3f}")
                 except Exception as e:
                     self._notify()
                     self.clear()
