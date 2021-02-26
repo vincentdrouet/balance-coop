@@ -11,12 +11,11 @@
     "@mdi/font": "^5.9.55",
     "axios": "^0.21.1",
     "core-js": "^3.9.0",
-    "lodash": "^4.17.20",
     "material-design-icons": "^3.0.1",
     "vue": "^2.6.11",
     "vue-router": "^3.5.1",
     "vue-socket.io": "^3.0.10",
-    "vuetify": "^2.4.4",
+    "vuetify": "^2.4.5",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

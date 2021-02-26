@@ -37,9 +37,7 @@ dictConfig(
 logging.getLogger("werkzeug").setLevel(logging.WARN)
 
 app = Flask(__name__, static_folder=STATIC_PATH)
-socket_io = SocketIO(
-    app, cors_allowed_origins="*" if ALLOW_ALL_ORIGINS else CORS_ALLOWED_ORIGINS
-)
+socket_io = SocketIO(app, cors_allowed_origins="*" if ALLOW_ALL_ORIGINS else CORS_ALLOWED_ORIGINS)
 
 printer = Printer()
 
