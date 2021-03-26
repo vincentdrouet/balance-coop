@@ -2,6 +2,7 @@ import logging
 import math
 import os
 import socket
+import time
 from datetime import datetime
 
 from escpos.printer import Network
@@ -36,7 +37,7 @@ class Printer:
             self._printer.set(align="center", bold=True)
         return self._printer
 
-    def print_product_label(self, product, weight, cut):
+    def print_product_label(self, product, weight, cut, retry=0):
         try:
             if not self.printer:
                 return
@@ -59,3 +60,7 @@ class Printer:
         except Exception as e:
             logging.error(e)
             self._printer = None
+            retry += 1
+            if retry < 5:
+                time.sleep(0.5)
+                self.print_product_label(product, weight, cut, retry)
