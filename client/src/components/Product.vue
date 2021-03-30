@@ -9,8 +9,7 @@
           Erreur d'impression !
         </v-card-title>
 
-        <v-card-text>
-          <v-spacer></v-spacer>
+        <v-card-text class="pa-3 ma-0">
           Il semble impossible d'imprimer le ticket.<br/>
           Verifier la mise sous tention et le cablage de l'imprimante.<br/>
           Si le problème perciste, contacter le groupe informatique.<br/>
@@ -21,7 +20,7 @@
           <v-btn
             color="green darken-1"
             text
-            @click="printError = ''"
+            @click="printError = false"
           >
             Ok
           </v-btn>
@@ -149,20 +148,37 @@ export default {
   },
   data: () => ({
     weight: 0.0,
-    healthy: false,
-    connected: false,
     weightChange: false,
     printInProgress: false,
     printError: '',
   }),
-  created() {
-    this.healthy = this.$store.state.scale.healthy;
-    this.connected = this.$store.state.scale.connected;
-    if (this.healthy && this.connected) {
-      this.weight = this.$store.state.scale.weight;
-    } else {
-      this.weightChange = true;
-    }
+  watch: {
+    weightFromScale() {
+      if (!this.weightChange) {
+        this.weight = this.weightFromScale;
+      }
+    },
+    healthy() {
+      if (!this.healthy || !this.connected) {
+        this.weightChange = true;
+      }
+    },
+    connected() {
+      if (!this.healthy || !this.connected) {
+        this.weightChange = true;
+      }
+    },
+  },
+  computed: {
+    weightFromScale() {
+      return this.$store.state.scale.weight;
+    },
+    healthy() {
+      return this.$store.state.scale.healthy;
+    },
+    connected() {
+      return this.$store.state.scale.connected;
+    },
   },
   methods: {
     asEuro(number) {
@@ -189,9 +205,9 @@ export default {
       ).then(() => {
         this.printInProgress = false;
         this.$emit('cancel');
-      }).catch((error) => {
-        this.printError = error;
+      }).catch(() => {
         this.printInProgress = false;
+        this.printError = true;
       });
     },
   },
