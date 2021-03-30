@@ -9,7 +9,7 @@ from escpos.printer import Network
 from flask import abort
 
 PRINTER_IP = os.getenv("PRINTER_IP")
-RETRY_NB = 5
+RETRY_NB = 3
 
 
 # Network close is called on __del__ and could raise OSError
