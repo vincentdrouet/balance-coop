@@ -152,7 +152,20 @@ export default {
     printInProgress: false,
     printError: '',
   }),
+  created() {
+    if (!this.healthy || !this.connected) {
+      this.weightChange = true;
+      this.weight = 0.0;
+    } else {
+      this.weight = this.weightFromScale;
+    }
+  },
   watch: {
+    weightChange() {
+      if (!this.weightChange) {
+        this.weight = this.weightFromScale;
+      }
+    },
     weightFromScale() {
       if (!this.weightChange) {
         this.weight = this.weightFromScale;
@@ -161,11 +174,13 @@ export default {
     healthy() {
       if (!this.healthy || !this.connected) {
         this.weightChange = true;
+        this.weight = 0.0;
       }
     },
     connected() {
       if (!this.healthy || !this.connected) {
         this.weightChange = true;
+        this.weight = 0.0;
       }
     },
   },
