@@ -36,14 +36,6 @@
                   hide-details
                   label="Uniquement les produits BIO"
                 ></v-checkbox>
-                <v-checkbox
-                  width="100%"
-                  dark
-                  class="pa-4"
-                  v-model="withSomeQty"
-                  hide-details
-                  label="Uniquement avec stock > 0"
-                ></v-checkbox>
               </v-row>
             </v-container>
           </v-btn-toggle>
@@ -124,7 +116,6 @@
       <Products
         :filter="filter"
         :productsCategory="productsCategory"
-        :withSomeQty="withSomeQty"
         :onlyBio="onlyBio"
         @clearFilter="clearFilter"
       />
@@ -147,7 +138,6 @@ export default {
   },
   data: () => ({
     productsCategory: null,
-    withSomeQty: false,
     onlyBio: false,
     filter: null,
     freeze: false,
