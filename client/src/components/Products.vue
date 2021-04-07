@@ -122,11 +122,12 @@ export default {
     filter: String,
     onlyBio: Boolean,
     productsCategory: String,
-    withSomeQty: Boolean,
   },
   data: () => ({
     selectedProduct: null,
     onBoarding: 0,
+    columnsNb: 4,
+    rowsNb: 4,
   }),
   watch: {
     productsCategory() {
@@ -154,13 +155,6 @@ export default {
     },
   },
   computed: {
-    rowsNb() {
-      return Math.floor(this.$vuetify.breakpoint.height / 220);
-    },
-    columnsNb() {
-      const productsWidth = this.$vuetify.breakpoint.width * 0.83;
-      return Math.floor(productsWidth / 410);
-    },
     bagsOfProducts() {
       const nbProductsByPage = this.columnsNb * this.rowsNb;
       const nbPages = Math.ceil(this.products.length / nbProductsByPage);
@@ -203,9 +197,6 @@ export default {
       if (this.productsCategory) {
         products = products.filter((product) => product.category === this.productsCategory);
       }
-      if (this.withSomeQty) {
-        products = products.filter((product) => product.qty_available > 0);
-      }
       return products;
     },
     inProgress() {
@@ -217,7 +208,7 @@ export default {
 
 <style>
   .v-list-item {
-    width: 25vw;
+    width: 20vw;
     height: 20vh;
   }
   .v-window__container {

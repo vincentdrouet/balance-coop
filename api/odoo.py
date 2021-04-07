@@ -2,14 +2,10 @@ import json
 import logging
 import os
 import re
+import xmlrpc.client
 from typing import Dict, List
 
-import httpx
-from aio_odoorpc_base.helpers import execute_kwargs
-from aio_odoorpc_base.sync.common import login as odoo_login
-from aio_odoorpc_base.sync.object import execute_kw
-
-ODOO_URL = os.getenv("ODOO_URL", "https://test.sas.lachouettecoop.fr/jsonrpc")
+ODOO_URL = os.getenv("ODOO_URL", "https://test.sas.lachouettecoop.fr")
 ODOO_DB = os.getenv("ODOO_DB", "dbsas")
 ODOO_LOGIN = os.getenv("ODOO_LOGIN")
 ODOO_PASSWORD = os.getenv("ODOO_PASSWORD")
@@ -53,6 +49,45 @@ UNWANTED_NAME_CHUNKS = [
 UNWANTED_NAME_CHUNKS_PATTERNS = [re.compile(u, re.IGNORECASE) for u in UNWANTED_NAME_CHUNKS]
 
 
+class OdooAPI:
+    def __init__(self):
+        try:
+            self.url = ODOO_URL
+            self.db = ODOO_DB
+            self.user = ODOO_LOGIN
+            self.passwd = ODOO_PASSWORD
+            common_proxy_url = "{}/xmlrpc/2/common".format(self.url)
+            object_proxy_url = "{}/xmlrpc/2/object".format(self.url)
+            self.common = xmlrpc.client.ServerProxy(common_proxy_url)
+            self.uid = self.common.authenticate(self.db, self.user, self.passwd, {})
+            self.models = xmlrpc.client.ServerProxy(object_proxy_url)
+        except Exception as e:
+            logging.error(f"Odoo API connection impossible: {e}")
+
+    def search_read(self, entity, cond=None, fields=None, limit=0, offset=0, order="id ASC"):
+        """Main api request, retrieving data according search conditions."""
+        fields_and_context = {
+            "fields": fields if fields else {},
+            "context": {"lang": "fr_FR", "tz": "Europe/Paris"},
+            "limit": limit,
+            "offset": offset,
+            "order": order,
+        }
+
+        return self.models.execute_kw(
+            self.db,
+            self.uid,
+            self.passwd,
+            entity,
+            "search_read",
+            [cond if cond else []],
+            fields_and_context,
+        )
+
+    def authenticate(self, login, password):
+        return self.common.authenticate(self.db, login, password, {})
+
+
 def _load_from_file():
     if not os.path.exists(DATA_PATH):
         return []
@@ -94,45 +129,29 @@ def _consolidate(products: List[Dict]):
 
 def variable_weight_products():
     try:
-        with httpx.Client(timeout=120) as client:
-            uid = odoo_login(
-                http_client=client,
-                url=ODOO_URL,
-                db=ODOO_DB,
-                login=ODOO_LOGIN,
-                password=ODOO_PASSWORD,
-            )
-            kwargs = execute_kwargs(
-                fields=[
-                    "barcode",
-                    "categ_id",
-                    "image_medium",
-                    "name_template",
-                    "theoritical_price",
-                    "qty_available",
-                ]
-            )
-            products = execute_kw(
-                http_client=client,
-                url=ODOO_URL,
-                db=ODOO_DB,
-                uid=uid,
-                password=ODOO_PASSWORD,
-                obj="product.product",
-                method="search_read",
-                args=[
-                    ["active", "=", True],
-                    ["sale_ok", "=", True],
-                    # In 'La Chouette Coop', all variable weight products
-                    # have a barcode starting with 260
-                    ["barcode", "like", "260__________"],
-                ],
-                kw=kwargs,
-            )
-            logging.info(f"{len(products)} products found")
-            _consolidate(products)
-            _save_in_file(products)
-            return products
+        odoo_api = OdooAPI()
+        products = odoo_api.search_read(
+            "product.product",
+            cond=[
+                ["sale_ok", "=", True],
+                # In 'La Chouette Coop', all variable weight products
+                # have a barcode starting with 260
+                ["barcode", "like", "260__________"],
+            ],
+            fields=[
+                "barcode",
+                "categ_id",
+                "image_medium",
+                "name_template",
+                "theoritical_price",
+                "qty_available",
+            ],
+            order="name_template ASC",
+        )
+        logging.info(f"{len(products)} products found")
+        _consolidate(products)
+        _save_in_file(products)
+        return products
     except Exception as e:
         logging.error(e)
         return _load_from_file()

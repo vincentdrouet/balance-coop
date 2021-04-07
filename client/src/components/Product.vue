@@ -29,7 +29,7 @@
     </v-dialog>
     <v-card>
       <v-card-title class="pb-1 pr-0">
-        <h4>{{ product.name }}</h4>
+        <h5>{{ product.name }}</h5>
       </v-card-title>
       <v-card-text class="pa-0 ma-0">
         <v-row class="pa-0 ma-0 pr-4">
@@ -52,14 +52,14 @@
             class="pa-0 ma-0 d-flex flex-column justify-start align-center"
             style="height: 100%"
           >
-            <h2>Id. {{ product.id }}</h2>
-            <h2><br/>{{ asEuro(product.theoritical_price) }} / kg</h2>
+            <h3>Id. {{ product.id }}</h3>
+            <h3><br/>{{ asEuro(product.theoritical_price) }} / kg</h3>
             <v-img
               v-if="product.bio"
               src="@/assets/bio.jpeg"
               max-height="50"
               max-width="40"
-              class="mt-6"
+              class="ma-3"
             />
           </v-col>
           <v-col class="pa-0 ma-0 align-self-center" align="center" v-if="selected">
