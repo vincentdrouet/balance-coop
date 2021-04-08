@@ -18,8 +18,11 @@ odoo:
     - sous vide
     - ss vide"
     - à la pièce
-    - maraîcher
     - piece
+    - pièce
+    - maraîcher
+    - conventionnel
+
 
 printer:
   ip: 192.168.70.106
