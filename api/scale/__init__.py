@@ -1,22 +1,16 @@
 import logging
-import os
 import socket
 from threading import Thread
 from time import sleep
 
+from api import config
 from api.scale.message import Message
 from api.scale.screen import Screen
-
-MOCK_SCALE = os.environ.get("MOCK_SCALE", "False").lower() in ["true", "1"]
-SCALE_ADDR = os.getenv("SCALE_ADDR")
-SCALE_PORT = int(os.getenv("SCALE_PORT", 65432))
 
 
 class Scale(Thread):
     def __init__(self, socket_io):
         super(Scale, self).__init__()
-        self.addr = SCALE_ADDR
-        self.port = SCALE_PORT
         self._socket_io = socket_io
         self._keep_running = True
         self._sock = None
@@ -31,7 +25,7 @@ class Scale(Thread):
     def run(self):
         s = Screen()
         while self._keep_running:
-            if MOCK_SCALE:
+            if config.core.mock_scale:
                 import random
 
                 self._healthy = True
@@ -41,7 +35,7 @@ class Scale(Thread):
             else:
                 try:
                     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as self._sock:
-                        self._sock.connect((self.addr, self.port))
+                        self._sock.connect(config.scale.ip)
                         while self._keep_running:
                             m = Message(self._sock)
                             m.read()

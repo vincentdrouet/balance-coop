@@ -27,14 +27,22 @@
               >
                 <v-btn :value="category" width="50%" height="80px">{{ category }}</v-btn>
               </v-row>
-              <v-row style="width: 100%; justify-content: center; align-content: center">
+              <v-row style="width: 100%; justify-content: left; align-content: center">
                 <v-checkbox
                   width="100%"
                   dark
                   class="pa-4"
                   v-model="onlyBio"
                   hide-details
-                  label="Uniquement les produits BIO"
+                  label="Uniquement BIO"
+                ></v-checkbox>
+                <v-checkbox
+                  width="100%"
+                  dark
+                  class="pa-4"
+                  v-model="onlyVariable"
+                  hide-details
+                  label="Uniquement à poids variable"
                 ></v-checkbox>
               </v-row>
             </v-container>
@@ -117,6 +125,7 @@
         :filter="filter"
         :productsCategory="productsCategory"
         :onlyBio="onlyBio"
+        :onlyVariable="onlyVariable"
         @clearFilter="clearFilter"
       />
     </v-row>
@@ -139,6 +148,7 @@ export default {
   data: () => ({
     productsCategory: null,
     onlyBio: false,
+    onlyVariable: true,
     filter: null,
     freeze: false,
   }),
