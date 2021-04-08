@@ -52,8 +52,14 @@
             class="pa-0 ma-0 d-flex flex-column justify-start align-center"
             style="height: 100%"
           >
-            <h3>Id. {{ product.id }}</h3>
-            <h3><br/>{{ asEuro(product.theoritical_price) }} / kg</h3>
+            <template v-if="variableWeightProduct()">
+              <h3>Id. {{ product.id }}</h3>
+              <h3><br/>{{ asEuro(product.theoritical_price) }} / kg</h3>
+            </template>
+            <template v-else>
+              <h3>Vendu à la pièce</h3>
+              <h3><br/>{{ asEuro(product.theoritical_price) }}</h3>
+            </template>
             <v-img
               v-if="product.bio"
               src="@/assets/bio.jpeg"
@@ -62,7 +68,8 @@
               class="ma-3"
             />
           </v-col>
-          <v-col class="pa-0 ma-0 align-self-center" align="center" v-if="selected">
+          <v-col v-if="selected && variableWeightProduct()"
+                 class="pa-0 ma-0 align-self-center" align="center">
             <v-row>
               <v-col>
                 <h2 :class="weight>0&&weight<100?'text-right':'orange--text text-right'">
@@ -104,17 +111,20 @@
                @click="$emit('cancel')">
           Annuler
         </v-btn>
-        <v-btn width="200px" height="80px"
+        <v-btn v-if="variableWeightProduct()"
+               width="200px" height="80px"
                @click="weightChange=!weightChange"
                :input-value="weightChange">
           Modifier le poids
         </v-btn>
-        <v-btn width="200px" height="80px"
+        <v-btn v-if="variableWeightProduct()"
+               width="200px" height="80px"
                @click="printLabel(false)"
                :disabled="weight<=0 || weight>=100">
           Valider
         </v-btn>
-        <v-btn width="200px" height="80px"
+        <v-btn v-if="variableWeightProduct()"
+               width="200px" height="80px"
                @click="printLabel(true)"
                :disabled="weight<=0 || weight>=100">
           Valider<br/>et<br/>Couper le ticket
@@ -123,7 +133,7 @@
       <v-card-actions v-if="selected && weightChange">
         <Keyboard @pressed="pressed" onlyNum/>
       </v-card-actions>
-      <v-card-text v-if="selected" class="pr-0">
+      <v-card-text v-if="selected && variableWeightProduct()" class="pr-0">
         <h4>
           * Le prix est donné à titre indicatif. Le calcul se fera en caisse au regard du poid.
         </h4>
@@ -196,6 +206,9 @@ export default {
     },
   },
   methods: {
+    variableWeightProduct() {
+      return !!this.product.id;
+    },
     asEuro(number) {
       // Create our number formatter.
       const formatter = new Intl.NumberFormat('fr-FR', {

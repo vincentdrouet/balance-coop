@@ -1,6 +1,5 @@
 import logging
 import math
-import os
 import socket
 import time
 from datetime import datetime
@@ -8,7 +7,8 @@ from datetime import datetime
 from escpos.printer import Network
 from flask import abort
 
-PRINTER_IP = os.getenv("PRINTER_IP")
+from api import config
+
 RETRY_NB = 3
 
 
@@ -27,10 +27,12 @@ Network.close = _close
 
 
 def print_product_label(product, weight, cut, retry=0):
-    if not PRINTER_IP:
+    if config.core.mock_printer:
+        return
+    if not config.printer.ip:
         abort(400, description="Printer not configured")
     try:
-        printer = Network(PRINTER_IP, timeout=10)
+        printer = Network(config.printer.ip, timeout=10)
         if product and 0 <= weight < 100:
             name = product.get("name")
             bio = product.get("bio", False)

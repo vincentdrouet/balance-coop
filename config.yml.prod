@@ -1,0 +1,28 @@
+odoo:
+  url: https://sas.lachouettecoop.fr
+  db: dbsas
+  user:
+  passwd:
+  categories:
+    fruits:
+      - 337
+    legumes:
+      - 418
+  unp:  # Unnecessary name parts
+    - vrac
+    - au kg
+    - 1 kg
+    - 1kg
+    - bio
+    - prix
+    - sous vide
+    - ss vide"
+    - à la pièce
+    - maraîcher
+    - piece
+
+printer:
+  ip: 192.168.70.106
+
+scale:
+  ip: 192.168.70.118:1240

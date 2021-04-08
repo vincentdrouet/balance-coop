@@ -19,19 +19,34 @@ docker-compose build
 ```
 
 ### Run
-WEB docker needs some environment variables defined in file web.env.
-```bash
-ODOO_URL=https://odoo.fr/jsonrpc  # Odoo jsonrc URL
-ODOO_LOGIN=...                    # Odoo user login
-ODOO_PASSWORD=...                 # Odoo user password
+This service needs a configuration file.
+```yaml
+odoo:
+  url: https://sas.lachouettecoop.fr  # odoo URL
+  db: dbsas                           # database used by odoo
+  user: ...                           # username
+  passwd: ...                         # password
+  categories:
+    fruits:                           # categories to show in UI
+      - 337                           # list of corresponding cqteg_id
+    legumes:
+      - 418
+  unp:                                # Unnecessary name parts (remove from product name in UI)
+    - vrac
+    - au kg
+    - 1 kg
 
-SCALE_ADDR=127.0.0.1              # Scale ip
-SCALE_PORT=65432                  # Scale port
+printer:                              # Printer IP
+  ip: 192.168.70.106
 
-ALLOW_ALL_ORIGINS=True            # For development only, CORS management
-MOCK_SCALE=True                   # For development only, mock scale
+scale:
+  ip: 192.168.70.118:1240             # Scale IP
 
-STATIC_PATH=/app/client/dist/static
+core:                                 # All options for development
+  allow_all_origins: true
+  cors_allowed_origins: "*"
+  mock_printer: true
+  mock_scale: true
 ```
 Then run
 ```bash

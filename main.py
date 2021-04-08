@@ -5,15 +5,11 @@ from logging.config import dictConfig
 from flask import Flask, jsonify, request, send_file, session
 from flask_socketio import SocketIO, emit
 
+from api import config
 from api.odoo import variable_weight_products
 from api.printer import print_product_label
 from api.scale import Scale
 
-ALLOW_ALL_ORIGINS = os.getenv("ALLOW_ALL_ORIGINS", "False").lower() in [
-    "true",
-    "1",
-]
-CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5000")
 STATIC_PATH = os.getenv("STATIC_PATH", "./client/dist/")
 
 dictConfig(
@@ -37,7 +33,7 @@ dictConfig(
 logging.getLogger("werkzeug").setLevel(logging.WARN)
 
 app = Flask(__name__, static_folder=STATIC_PATH)
-socket_io = SocketIO(app, cors_allowed_origins="*" if ALLOW_ALL_ORIGINS else CORS_ALLOWED_ORIGINS)
+socket_io = SocketIO(app, cors_allowed_origins=config.core.cors_allowed_origins)
 
 
 @app.route("/products")
@@ -60,7 +56,7 @@ def ping():
 
 @app.after_request
 def allow_all_origins(response):
-    if ALLOW_ALL_ORIGINS:
+    if config.core.allow_all_origins:
         response.headers["Access-Control-Allow-Origin"] = "*"
         response.headers["Access-Control-Allow-Headers"] = "*"
         response.headers["Access-Control-Allow-Methods"] = "*"

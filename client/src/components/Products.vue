@@ -121,6 +121,7 @@ export default {
   props: {
     filter: String,
     onlyBio: Boolean,
+    onlyVariable: Boolean,
     productsCategory: String,
   },
   data: () => ({
@@ -193,6 +194,9 @@ export default {
       }
       if (this.onlyBio) {
         products = products.filter((product) => product.bio);
+      }
+      if (this.onlyVariable) {
+        products = products.filter((product) => !!product.id);
       }
       if (this.productsCategory) {
         products = products.filter((product) => product.category === this.productsCategory);

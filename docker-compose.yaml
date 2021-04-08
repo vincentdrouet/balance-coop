@@ -6,9 +6,10 @@ services:
     restart: unless-stopped
     build:
       context: .
+    environment:
+      STATIC_PATH: /app/client/dist
     volumes:
       - ./data:/app/data
-    env_file:
-      - web.env
+      - ./config.yml:/app/cfg/config.yml
     ports:
       - 5000:5000/tcp
