@@ -12,7 +12,7 @@ const getters = {
   inProgress: (state) => state.inProgress,
 };
 
-const scale = {
+const products = {
   namespaced: true,
   state: initialState,
   getters,
@@ -43,4 +43,4 @@ const scale = {
   },
 };
 
-export default scale;
+export default products;

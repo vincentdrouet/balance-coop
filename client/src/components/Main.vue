@@ -50,14 +50,72 @@
         </v-row>
         <v-row class="refresh-row d-flex flex-row justify-space-around"
                no-gutters>
-          <v-btn
-            @click="printLabel"
-            fab
+          <v-menu
+            top
+            :offset-x="true"
+            :offset-y="true"
+            class="white"
+            v-bind:close-on-content-click="false"
           >
-            <v-icon>
-              mdi-scissors-cutting
-            </v-icon>
-          </v-btn>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                fab
+                @click="clearFilter"
+                :disabled="labels.length <= 0"
+              >
+                <v-icon>
+                  mdi-format-list-numbered
+                </v-icon>
+              </v-btn>
+            </template>
+
+            <v-container
+              style="height: 100%; background-color: white; width: 30vw;"
+              class="pa-1 ma-0"
+            >
+              <v-row v-for="(label, index) in labels"
+                     :key="index"
+                     style="width: 100%; justify-content: center"
+                     class="pa-0 ma-0"
+                     align-content="center"
+              >
+                <v-card style="width: 100%;">
+                  <v-card-title class="pa-1" style="width: 100%;">
+                    <v-row class="pa-0 ma-0" style="width: 100%;">
+                      <v-col
+                        cols="1"
+                        class="pa-0 ma-0 justify-start align-center"
+                        style="height: 100%;"
+                      >
+                        <h5>{{ index + 1 }})</h5>
+                      </v-col>
+                      <v-col
+                        cols="9"
+                        class="pa-0 ma-0 justify-start align-center"
+                        style="height: 100%;"
+                      >
+                        <h5>{{ label.product.name }}</h5>
+                      </v-col>
+                      <v-col
+                        cols="2"
+                        class="pa-0 ma-0 justify-start align-center"
+                        style="height: 100%;"
+                      >
+                        <h6 class="grey--text text--darken-2" v-if="label.product.id">
+                          {{ (label.weight).toFixed(3) }} / kg
+                        </h6>
+                        <h6 class="grey--text text--darken-2" v-else>
+                          {{ label.weight }}
+                        </h6>
+                      </v-col>
+                    </v-row>
+                  </v-card-title>
+                </v-card>
+              </v-row>
+            </v-container>
+          </v-menu>
           <v-menu
             top
             :offset-x="true"
@@ -84,6 +142,17 @@
               </v-row>
             </v-container>
           </v-menu>
+        </v-row>
+        <v-row class="refresh-row d-flex flex-row justify-space-around"
+               no-gutters>
+          <v-btn
+            @click="cutTicket"
+            fab
+          >
+            <v-icon>
+              mdi-scissors-cutting
+            </v-icon>
+          </v-btn>
           <v-menu
             top
             :offset-x="true"
@@ -133,10 +202,11 @@
 </template>
 
 <script>
+import asEuro from '@/mixin/euro';
+import print from '@/mixin/print';
 import Keyboard from './Keyboard.vue';
 import Products from './Products.vue';
 import Scale from './Scale.vue';
-import print from '../mixin/print';
 
 export default {
   name: 'Main',
@@ -163,6 +233,9 @@ export default {
     },
   },
   computed: {
+    labels() {
+      return this.$store.state.ticket.labels;
+    },
     categories() {
       const categories = [];
       let addOther = false;
@@ -181,15 +254,17 @@ export default {
     },
   },
   methods: {
+    asEuro,
     refreshProducts() {
       this.$store.dispatch('products/get');
     },
-    printLabel() {
+    cutTicket() {
       print(
         null,
         null,
         true,
       );
+      this.$store.dispatch('ticket/reset');
     },
     pressed(value) {
       if (value) {
