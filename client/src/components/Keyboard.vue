@@ -26,6 +26,7 @@
 export default {
   props: {
     onlyNum: Boolean,
+    noDot: Boolean,
   },
   data() {
     return {
@@ -64,12 +65,16 @@ export default {
     },
     getKeys() {
       if (this.onlyNum) {
-        return [
+        const keys = [
           ['7', '8', '9'],
           ['4', '5', '6'],
           ['1', '2', '3'],
-          ['SUPPR', '0', '.'],
+          ['SUPPR', '0'],
         ];
+        if (!this.noDot) {
+          keys[keys.length - 1].push('.');
+        }
+        return keys;
       }
       return [
         ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],

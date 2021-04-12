@@ -45,7 +45,12 @@ def products():
 @app.route("/print_label", methods=["POST"])
 def print_label():
     data = request.json
-    print_product_label(data.get("product", {}), data.get("weight", 0.0), data.get("cut", False))
+    print_product_label(
+        data.get("product", {}),
+        data.get("nb", 0),
+        data.get("weight", 0.0),
+        data.get("cut", False),
+    )
     return jsonify({"print": "ok"})
 
 
