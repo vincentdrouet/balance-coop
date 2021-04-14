@@ -37,7 +37,13 @@ SCHEMA = Dict(
                 "mock_printer": False,
             },
         ),
-    }
+    },
+    defaults={
+        "odoo": {},
+        "printer": {},
+        "scale": {},
+        "core": {},
+    },
 )
 
 
