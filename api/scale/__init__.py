@@ -35,7 +35,9 @@ class Scale(Thread):
             else:
                 try:
                     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as self._sock:
-                        self._sock.connect(config.scale.ip)
+                        ip = config.scale.ip.split(":")[0]
+                        port = int(config.scale.ip.split(":")[1])
+                        self._sock.connect((ip, port))
                         while self._keep_running:
                             m = Message(self._sock)
                             m.read()
