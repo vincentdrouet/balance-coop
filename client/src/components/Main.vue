@@ -129,6 +129,7 @@
                 v-on="on"
                 fab
                 @click="clearFilter"
+                :disabled="inProgress"
               >
                 <v-icon>
                   mdi-magnify
@@ -148,46 +149,21 @@
           <v-btn
             @click="cutTicket"
             fab
+            :disabled="inProgress"
           >
             <v-icon>
               mdi-scissors-cutting
             </v-icon>
           </v-btn>
-          <v-menu
-            top
-            :offset-x="true"
-            :offset-y="true"
-            class="white"
+          <v-btn
+            @click="refreshProducts"
+            fab
+            :disabled="inProgress"
           >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                v-bind="attrs"
-                v-on="on"
-                fab
-              >
-                <v-icon>
-                  mdi-wrench
-                </v-icon>
-              </v-btn>
-            </template>
-
-            <v-container
-              style="height: 100%; background-color: white"
-            >
-              <v-row class="pa-0 ma-0" align="center">
-                <v-btn
-                  @click="refreshProducts"
-                  height="80px"
-                  width="100%"
-                >
-                  <v-icon>
-                    mdi-refresh
-                  </v-icon>
-                  Rafraichir les produits
-                </v-btn>
-              </v-row>
-            </v-container>
-          </v-menu>
+            <v-icon>
+              mdi-refresh
+            </v-icon>
+          </v-btn>
         </v-row>
       </v-col>
       <Products
@@ -235,6 +211,9 @@ export default {
   computed: {
     labels() {
       return this.$store.state.ticket.labels;
+    },
+    inProgress() {
+      return this.$store.state.products.inProgress;
     },
     categories() {
       const categories = [];
