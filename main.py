@@ -49,6 +49,7 @@ def print_label():
         data.get("product", {}),
         data.get("nb", 0),
         data.get("weight", 0.0),
+        data.get("discount", False),
         data.get("cut", False),
     )
     return jsonify({"print": "ok"})

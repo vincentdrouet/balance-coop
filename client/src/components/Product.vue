@@ -102,9 +102,16 @@
               </v-col>
               <v-col>
                 <h2 :class="weight>0&&weight<100?'text-left':'orange--text'">
-                  {{ asEuro(product.theoritical_price * weight) }}
+                  {{ price() }}
                 </h2>
               </v-col>
+            </v-row>
+            <v-row justify="center">
+              <v-checkbox
+                v-model="discount"
+                hide-details
+                label="Appliquer -20%"
+              ></v-checkbox>
             </v-row>
           </v-col>
         </v-row>
@@ -115,10 +122,9 @@
           :size="100"
           :width="7"
           color="primary"
-          v-if="printInProgress && selected"
         />
       </v-card-actions>
-      <v-card-actions v-else-if="selected" class="justify-space-around">
+      <v-card-actions v-if="!printInProgress && selected" class="justify-space-around">
         <v-btn width="200px" height="80px"
                @click="$emit('cancel')">
           Annuler
@@ -175,6 +181,7 @@ export default {
     weightChange: false,
     printInProgress: false,
     printError: '',
+    discount: false,
   }),
   created() {
     if (!this.healthy || !this.connected || !this.variableWeightProduct()) {
@@ -224,6 +231,13 @@ export default {
       return !!this.product.id;
     },
     asEuro,
+    price() {
+      let price = this.product.theoritical_price * this.weight;
+      if (this.discount) {
+        price *= 0.8;
+      }
+      return asEuro(price);
+    },
     pressed(value) {
       if (value) {
         this.weight = parseFloat(value);
@@ -237,6 +251,7 @@ export default {
         this.product,
         this.$store.state.ticket.labels.length + 1,
         this.weight,
+        this.discount,
         cut,
       ).then(() => {
         if (cut) {

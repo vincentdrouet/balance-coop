@@ -26,7 +26,7 @@ def _close(self):
 Network.close = _close
 
 
-def print_product_label(product, nb, weight, cut, retry=0):
+def print_product_label(product, nb, weight, discount, cut, retry=0):
     if config.core.mock_printer:
         return
     if not config.printer.ip:
@@ -46,6 +46,12 @@ def print_product_label(product, nb, weight, cut, retry=0):
             price = theoritical_price * weight
             printer.textln(f"{theoritical_price:.3f} €/kg  / {price:.3f} €  *")
 
+            if discount:
+                printer.ln()
+                printer.set(align="center", bold=True, double_width=True, double_height=True)
+                printer.textln("Réduction à appliquer: -20%")
+                printer.set(align="center", bold=True)
+
             product_id = product.get("id")
             if product_id:
                 # <260><Product ID><Weight><CheckSum> / <3digits><4digits><5digits><1digit>
@@ -53,6 +59,7 @@ def print_product_label(product, nb, weight, cut, retry=0):
                 barcode = f"{product.get('barcode')[0:7]}{cg:05d}"
                 printer.barcode(barcode, "EAN13", height=128, width=2)
             else:
+                printer.ln()
                 printer.set(align="center", bold=True, double_width=True, double_height=True)
                 printer.textln(f"Quantité: {weight}")
                 printer.set(align="center", bold=True)
