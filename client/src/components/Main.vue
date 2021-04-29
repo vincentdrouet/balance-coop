@@ -241,6 +241,8 @@ export default {
       print(
         null,
         null,
+        null,
+        null,
         true,
       );
       this.$store.dispatch('ticket/reset');
