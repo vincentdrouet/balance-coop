@@ -26,7 +26,7 @@ def _close(self):
 Network.close = _close
 
 
-def print_product_label(product, nb, weight, discount, cut, retry=0):
+def print_product_label(product, nb, weight, discount=False, cut=False, retry=0):
     if config.core.mock_printer:
         return
     if not config.printer.ip:
@@ -63,6 +63,8 @@ def print_product_label(product, nb, weight, discount, cut, retry=0):
                 printer.set(align="center", bold=True, double_width=True, double_height=True)
                 printer.textln(f"Quantité: {weight}")
                 printer.set(align="center", bold=True)
+                if product.get("barcode"):
+                    printer.barcode(product.get("barcode"), "EAN13", height=128, width=2)
 
             printer.ln()
             printer.textln("---")
@@ -80,6 +82,6 @@ def print_product_label(product, nb, weight, discount, cut, retry=0):
         retry += 1
         if retry < RETRY_NB:
             time.sleep(1)
-            print_product_label(product, weight, cut, retry)
+            print_product_label(product, nb, weight, discount, cut, retry)
         else:
             abort(400, description="Too many retries")
