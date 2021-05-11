@@ -54,14 +54,13 @@
             >
               <v-btn
                 :input-value="active"
-                icon
-                width="56px"
-                height="56px"
+                rounded
                 @click="toggle"
               >
-                <v-icon :x-large="bagsOfProducts.length<25">
+                <v-icon>
                   mdi-record
                 </v-icon>
+                {{bagsOfProducts[n-1][0][0].name.substring(0, 2)}}.
               </v-btn>
             </v-item>
           </v-item-group>
