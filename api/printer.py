@@ -57,13 +57,15 @@ def print_product_label(product, nb, weight, discount=False, cut=False, retry=0)
                 # <260><Product ID><Weight><CheckSum> / <3digits><4digits><5digits><1digit>
                 cg = math.floor(weight * 1000)  # grams
                 barcode = f"{product.get('barcode')[0:7]}{cg:05d}"
+                printer.ln()
                 printer.barcode(barcode, "EAN13", height=128, width=2)
             else:
-                printer.ln()
                 printer.set(align="center", bold=True, double_width=True, double_height=True)
+                printer.ln()
                 printer.textln(f"Quantité: {weight}")
                 printer.set(align="center", bold=True)
                 if product.get("barcode"):
+                    printer.ln()
                     printer.barcode(product.get("barcode"), "EAN13", height=128, width=2)
 
             printer.ln()
