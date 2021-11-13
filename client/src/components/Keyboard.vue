@@ -1,7 +1,30 @@
 <template>
   <v-container class="d-flex flex-column grey lighten-5 align-center">
-    <v-row no-gutters style="height: 50px">
-      <h2 :class="isValid()?'pb-5':'red--text pb-5'"> {{ getValue() }}</h2>
+     <v-row style="width: 100%; height: 80px;" class="pa-0 ma-0">
+      <v-col cols="2" class="pa-0 ma-0">
+        <v-btn v-if="!onlyNum"
+               width="100px"
+               height="60px"
+               class="pa-0 ma-0"
+               @click="$emit('close')">
+          <v-icon>mdi-magnify-close</v-icon>
+        </v-btn>
+      </v-col>
+      <v-col cols="8">
+        <h2 :class="isValid()?'pb-5':'red--text pb-5'" style="text-align: center">
+          {{ getValue() }}
+        </h2>
+      </v-col>
+      <v-col cols="2" class="pa-0 ma-0 d-flex flex-column">
+        <v-btn v-if="!onlyNum"
+               width="100px"
+               height="60px"
+               class="pa-0 ma-0"
+               style="align-self: end"
+               @click="$emit('close')">
+          <v-icon>mdi-magnify-close</v-icon>
+        </v-btn>
+      </v-col>
     </v-row>
     <v-row
       v-for="r in getKeys()"
@@ -14,7 +37,7 @@
         <v-btn width="100px" height="80px" @click="press(c)">
           <v-icon v-if="c==='SUPPR'">mdi-backspace</v-icon>
           <v-icon v-else-if="c==='SPACE'">mdi-keyboard-space</v-icon>
-          <p v-else>{{ c }}</p>
+          <h2 v-else>{{ c }}</h2>
         </v-btn>
       </v-col>
     </v-row>

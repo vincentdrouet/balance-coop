@@ -23,6 +23,8 @@ odoo:
     - maraîcher
     - conventionnel
     - barquette
+    - "- potager des rainettes -"
+    - "- le potager des rainettes -"
 
 printer:
   ip: 192.168.70.106
