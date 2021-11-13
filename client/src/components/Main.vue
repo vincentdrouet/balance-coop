@@ -122,6 +122,7 @@
             :offset-y="true"
             class="white"
             v-bind:close-on-content-click="false"
+            v-model="searchOpened"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -139,7 +140,7 @@
 
             <v-container class="pa-0 ma-0">
               <v-row class="pa-0 ma-0" align="center">
-                <Keyboard ref="keyboard" @pressed="pressed"/>
+                <Keyboard ref="keyboard" @pressed="pressed" @close="searchOpened=false"/>
               </v-row>
             </v-container>
           </v-menu>
@@ -194,9 +195,10 @@ export default {
   data: () => ({
     productsCategory: null,
     onlyBio: false,
-    onlyVariable: true,
+    onlyVariable: false,
     filter: null,
     freeze: false,
+    searchOpened: false,
   }),
   created() {
     this.refreshProducts();
