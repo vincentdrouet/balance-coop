@@ -3,6 +3,8 @@ import axios from 'axios';
 import serverUrl from '../mixin/url';
 
 const initialState = {
+  synced: false,
+  date: '',
   products: [],
   inProgress: false,
 };
@@ -35,7 +37,9 @@ const products = {
   },
   mutations: {
     setProducts(state, data) {
-      state.products = data;
+      state.synced = data.synced;
+      state.date = data.date;
+      state.products = data.products;
     },
     setInProgress(state, inProgress) {
       state.inProgress = inProgress;
