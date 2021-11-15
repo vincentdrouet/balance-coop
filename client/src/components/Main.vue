@@ -166,6 +166,19 @@
             </v-icon>
           </v-btn>
         </v-row>
+        <v-divider v-if="lastSyncDate" class="white mb-6"></v-divider>
+        <v-row v-if="lastSyncDate" style="max-height: 10%">
+          <v-col>
+            <h5 :class="isSynced?'white--text text-right':'orange--text text-right'">
+              MAJ produits :
+            </h5>
+          </v-col>
+          <v-col>
+            <h5 :class="isSynced?'white--text':'orange--text'">
+              {{ lastSyncDate }}
+            </h5>
+          </v-col>
+        </v-row>
       </v-col>
       <Products
         :filter="filter"
@@ -216,6 +229,12 @@ export default {
     },
     inProgress() {
       return this.$store.state.products.inProgress;
+    },
+    isSynced() {
+      return this.$store.state.products.synced;
+    },
+    lastSyncDate() {
+      return this.$store.state.products.date;
     },
     categories() {
       const categories = [];

@@ -3,6 +3,7 @@ import logging
 import os
 import re
 import xmlrpc.client
+from datetime import datetime
 from typing import Dict, List
 
 from api import config
@@ -49,9 +50,12 @@ class OdooAPI:
         return self.common.authenticate(config.odoo.db, login, password, {})
 
 
-def _load_from_file():
+def _load_from_file() -> Dict:
     if not os.path.exists(DATA_PATH):
-        return []
+        return {
+            "date": "",
+            "products": [],
+        }
     with open(DATA_PATH) as json_file:
         return json.load(json_file)
 
@@ -63,7 +67,7 @@ def _save_in_file(products):
         json.dump(products, json_file)
 
 
-def _consolidate(products: List[Dict]):
+def _consolidate(products: List[Dict]) -> Dict:
     cid_to_c = {}
     for c, cids in config.odoo.categories.items():
         for cid in cids:
@@ -80,6 +84,10 @@ def _consolidate(products: List[Dict]):
         for p in unp:
             name = p.sub("", name)
         product["name"] = name.strip()
+    return {
+        "date": datetime.now().strftime("%d/%m/%y %H:%M"),
+        "products": products,
+    }
 
 
 def variable_weight_products():
@@ -102,9 +110,12 @@ def variable_weight_products():
             order="name ASC",
         )
         logging.info(f"{len(products)} products found")
-        _consolidate(products)
-        _save_in_file(products)
-        return products
+        data = _consolidate(products)
+        _save_in_file(data)
+        data["synced"] = True
+        return data
     except Exception as e:
         logging.error(e)
-        return _load_from_file()
+        data = _load_from_file()
+        data["synced"] = False
+        return data
