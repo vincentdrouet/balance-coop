@@ -28,6 +28,10 @@ Network.close = _close
 
 def print_product_label(product, nb, weight, discount=False, cut=False, retry=0):
     if config.core.mock_printer:
+        logging.info(
+            f"{product.get('name')} | nb: {nb} | weight: {weight} "
+            f"| discount: {discount} | cut: {cut}"
+        )
         return
     if not config.printer.ip:
         abort(400, description="Printer not configured")
