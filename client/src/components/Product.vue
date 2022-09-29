@@ -147,7 +147,7 @@
         </v-btn>
       </v-card-actions>
       <v-card-actions v-if="selected && weightChange">
-        <Keyboard @pressed="pressed" onlyNum :noDot="!variableWeightProduct()"/>
+        <Keyboard @pressed="pressed" onlyNum />
       </v-card-actions>
       <v-card-text v-if="selected" class="pr-0">
         <h4 v-if="variableWeightProduct()">
