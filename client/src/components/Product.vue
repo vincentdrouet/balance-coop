@@ -106,11 +106,16 @@
                 </h2>
               </v-col>
             </v-row>
-            <v-row justify="center">
+            <v-row class="justify-space-around">
               <v-checkbox
-                v-model="discount"
+                v-model="discount20"
                 hide-details
-                label="Appliquer -20%"
+                label="-20%"
+              ></v-checkbox>
+              <v-checkbox
+                v-model="discount50"
+                hide-details
+                label="-50%"
               ></v-checkbox>
             </v-row>
           </v-col>
@@ -181,7 +186,9 @@ export default {
     weightChange: false,
     printInProgress: false,
     printError: '',
-    discount: false,
+    discount: 0,
+    discount20: false,
+    discount50: false,
   }),
   created() {
     if (!this.healthy || !this.connected || !this.variableWeightProduct()) {
@@ -214,6 +221,26 @@ export default {
         this.weight = 0.0;
       }
     },
+    discount20() {
+      if (this.discount20) {
+        if (this.discount50) {
+          this.discount50 = false;
+        }
+        this.discount = 20;
+      } else {
+        this.discount = 0;
+      }
+    },
+    discount50() {
+      if (this.discount50) {
+        if (this.discount20) {
+          this.discount20 = false;
+        }
+        this.discount = 50;
+      } else {
+        this.discount = 0;
+      }
+    },
   },
   computed: {
     weightFromScale() {
@@ -233,8 +260,10 @@ export default {
     asEuro,
     price() {
       let price = this.product.theoritical_price * this.weight;
-      if (this.discount) {
+      if (this.discount20) {
         price *= 0.8;
+      } else if (this.discount50) {
+        price *= 0.5;
       }
       return asEuro(price);
     },
