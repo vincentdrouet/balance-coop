@@ -1,8 +1,9 @@
+import atexit
 import logging
 import os
 from logging.config import dictConfig
 
-from flask import Flask, jsonify, request, send_file, session
+from flask import Flask, jsonify, request, send_file
 from flask_socketio import SocketIO, emit
 
 from api import config
@@ -27,13 +28,17 @@ dictConfig(
                 "formatter": "default",
             }
         },
-        "root": {"level": "INFO", "handlers": ["wsgi"]},
+        "root": {"level": "DEBUG", "handlers": ["wsgi"]},
     }
 )
 logging.getLogger("werkzeug").setLevel(logging.WARN)
 
 app = Flask(__name__, static_folder=STATIC_PATH)
 socket_io = SocketIO(app, cors_allowed_origins=config.core.cors_allowed_origins)
+scale = {
+    "clients_nb": 0,
+    "scale": None,
+}
 
 
 @app.route("/products")
@@ -49,7 +54,7 @@ def print_label():
         data.get("product", {}),
         data.get("nb", 0),
         data.get("weight", 0.0),
-        data.get("discount", False),
+        data.get("discount", 0.0),
         data.get("cut", False),
     )
     return jsonify({"print": "ok"})
@@ -71,27 +76,35 @@ def allow_all_origins(response):
 
 @socket_io.on("connect")
 def on_connect():
-    logging.info("Connected ...")
-    if session.get("clients_nb", 0) == 0:
-        scale = Scale(socket_io)
-        scale.start()
-        session["scale"] = scale
-        session["clients_nb"] = 0
-    session["clients_nb"] += 1
-    scale = session["scale"]
+    logging.info("Connected")
+    global scale
+    if scale.get("clients_nb", 0) == 0:
+        scale["scale"] = Scale(socket_io)
+        scale["scale"].start()
+        scale["clients_nb"] = 0
+    scale["clients_nb"] += 1
     emit(
         "scale_status",
-        scale.status,
+        scale["scale"].status,
     )
 
 
 @socket_io.on("disconnect")
 def on_disconnect():
     logging.info("Disconnected ...")
-    if session.get("clients_nb", 0) == 1 and session.get("scale"):
-        session["scale"].stop()
-        session["scale"] = None
-    session["clients_nb"] -= 1
+    global scale
+    if scale.get("clients_nb", 0) == 1 and scale.get("scale"):
+        scale["scale"].stop()
+        scale["scale"] = None
+    scale["clients_nb"] -= 1
+
+
+@atexit.register
+def shut_scale_down():
+    if scale.get("scale"):
+        scale["scale"].stop()
+        scale["scale"] = None
+    scale["clients_nb"] = 0
 
 
 @app.route("/")

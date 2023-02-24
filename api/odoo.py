@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import re
+import ssl
 import xmlrpc.client
 from datetime import datetime
 from typing import Dict, List
@@ -10,6 +11,7 @@ from api import config
 
 unp = [re.compile(p, re.IGNORECASE) for p in config.odoo.unp]
 
+CONTEXT = os.getenv("NO_SSL")
 DATA_PATH = os.getenv("DATA_PATH", "./data/odoo.json")
 
 
@@ -18,11 +20,18 @@ class OdooAPI:
         try:
             common_proxy_url = "{}/xmlrpc/2/common".format(config.odoo.url)
             object_proxy_url = "{}/xmlrpc/2/object".format(config.odoo.url)
-            self.common = xmlrpc.client.ServerProxy(common_proxy_url)
+            context = ssl._create_unverified_context() if CONTEXT else None
+            self.common = xmlrpc.client.ServerProxy(
+                common_proxy_url,
+                context=context,
+            )
             self.uid = self.common.authenticate(
                 config.odoo.db, config.odoo.user, config.odoo.passwd, {}
             )
-            self.models = xmlrpc.client.ServerProxy(object_proxy_url)
+            self.models = xmlrpc.client.ServerProxy(
+                object_proxy_url,
+                context=context,
+            )
         except Exception as e:
             logging.error(f"Odoo API connection impossible: {e}")
 

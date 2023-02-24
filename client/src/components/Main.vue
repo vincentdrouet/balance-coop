@@ -27,24 +27,6 @@
               >
                 <v-btn :value="category" width="50%" height="80px">{{ category }}</v-btn>
               </v-row>
-              <v-row style="width: 100%; justify-content: left; align-content: center">
-                <v-checkbox
-                  width="100%"
-                  dark
-                  class="pa-4"
-                  v-model="onlyBio"
-                  hide-details
-                  label="Uniquement BIO"
-                ></v-checkbox>
-                <v-checkbox
-                  width="100%"
-                  dark
-                  class="pa-4"
-                  v-model="onlyVariable"
-                  hide-details
-                  label="Uniquement à poids variable"
-                ></v-checkbox>
-              </v-row>
             </v-container>
           </v-btn-toggle>
         </v-row>
@@ -183,8 +165,6 @@
       <Products
         :filter="filter"
         :productsCategory="productsCategory"
-        :onlyBio="onlyBio"
-        :onlyVariable="onlyVariable"
         @clearFilter="clearFilter"
       />
     </v-row>
