@@ -12,7 +12,7 @@
         <v-card-text class="pa-3 ma-0">
           Il semble impossible d'imprimer le ticket.<br/>
           Verifier la mise sous tention et le cablage de l'imprimante.<br/>
-          Si le problème perciste, contacter le groupe informatique.<br/>
+          Si le problème persiste, contacter le groupe informatique.<br/>
         </v-card-text>
 
         <v-card-actions>
